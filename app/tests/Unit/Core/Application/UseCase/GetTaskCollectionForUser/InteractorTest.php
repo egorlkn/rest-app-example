@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Core\Application\UseCase\GetTaskCollectionForUserId;
+namespace App\Tests\Unit\Core\Application\UseCase\GetTaskCollectionForUserId;
 
 use App\Core\Application\UseCase\GetTaskCollectionForUser\Interactor;
 use App\Core\Application\UseCase\GetTaskCollectionForUser\TaskProvider\TaskCollectionProvider;
@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Class InteractorTest
- * @package App\Tests\Core\Application\UseCase\GetTaskCollectionForUserId
+ * @package App\Tests\Unit\Core\Application\UseCase\GetTaskCollectionForUserId
  */
 class InteractorTest extends TestCase
 {

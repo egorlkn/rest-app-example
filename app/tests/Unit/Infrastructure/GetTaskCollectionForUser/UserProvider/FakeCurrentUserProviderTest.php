@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace App\Tests\Infrastructure\GetTaskCollectionForUser\UserProvider;
+namespace App\Tests\Unit\Infrastructure\GetTaskCollectionForUser\UserProvider;
 
 use App\Core\Domain\User;
 use App\Infrastructure\GetTaskCollectionForUser\UserProvider\FakeCurrentUserProvider;
@@ -9,7 +9,7 @@ use Ramsey\Uuid\Uuid;
 
 /**
  * Class FakeCurrentUserProviderTest
- * @package App\Tests\Infrastructure\GetTaskCollectionForUser\UserProvider
+ * @package App\Tests\Unit\Infrastructure\GetTaskCollectionForUser\UserProvider
  */
 class FakeCurrentUserProviderTest extends TestCase
 {

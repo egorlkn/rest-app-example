@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace App\Tests\Core\Application\UseCase\GetTaskCollectionForUser;
+namespace App\Tests\Unit\Core\Application\UseCase\GetTaskCollectionForUser;
 
 use App\Core\Application\UseCase\GetTaskCollectionForUser\GetTaskCollectionForUserResult;
 use App\Core\Application\UseCase\GetTaskCollectionForUser\TaskProvider\TaskCollectionProviderResult;
@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Class GetTaskCollectionForUserResultTest
- * @package App\Tests\Core\Application\UseCase\GetTaskCollectionForUser
+ * @package App\Tests\Unit\Core\Application\UseCase\GetTaskCollectionForUser
  */
 class GetTaskCollectionForUserResultTest extends TestCase
 {

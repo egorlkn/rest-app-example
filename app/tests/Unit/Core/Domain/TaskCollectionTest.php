@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace App\Tests\Core\Domain;
+namespace App\Tests\Unit\Core\Domain;
 
 use App\Core\Domain\Task;
 use App\Core\Domain\TaskCollection;
@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Class TaskCollectionTest
- * @package App\Tests\Core\Domain
+ * @package App\Tests\Unit\Core\Domain
  */
 class TaskCollectionTest extends TestCase
 {

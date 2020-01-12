@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace App\Tests\Core\Domain;
+namespace App\Tests\Unit\Core\Domain;
 
 use App\Core\Domain\Task;
 use PHPUnit\Framework\TestCase;
@@ -8,7 +8,7 @@ use Ramsey\Uuid\Uuid;
 
 /**
  * Class TaskTest
- * @package App\Tests\Core\Domain
+ * @package App\Tests\Unit\Core\Domain
  */
 class TaskTest extends TestCase
 {
