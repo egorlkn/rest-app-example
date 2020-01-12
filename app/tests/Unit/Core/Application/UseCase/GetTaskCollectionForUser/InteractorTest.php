@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Unit\Core\Application\UseCase\GetTaskCollectionForUserId;
+namespace App\Tests\Unit\Core\Application\UseCase\GetTaskCollectionForUser;
 
 use App\Core\Application\UseCase\GetTaskCollectionForUser\Interactor;
 use App\Core\Application\UseCase\GetTaskCollectionForUser\TaskProvider\TaskCollectionProvider;
