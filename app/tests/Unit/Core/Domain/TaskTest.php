@@ -24,7 +24,7 @@ class TaskTest extends TestCase
 
         $this->assertSame(
             [
-                'id' => $id,
+                'id' => $id->toString(),
                 'name' => $name,
             ],
             $task->toArray()

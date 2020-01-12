@@ -1,0 +1,3 @@
+controllers:
+    resource: ../../src/Infrastructure/GetTaskCollectionForUser/RequestHandler/RestApiHandler.php
+    type: annotation

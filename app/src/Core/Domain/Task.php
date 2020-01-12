@@ -41,7 +41,7 @@ class Task
     public function toArray(): array
     {
         return [
-            'id' => $this->id,
+            'id' => $this->id->toString(),
             'name' => $this->name,
         ];
     }

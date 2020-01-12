@@ -1,4 +1,19 @@
 {
+    "doctrine/annotations": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "cb4152ebcadbe620ea2261da1a1c5a9b8cea7672"
+        },
+        "files": [
+            "config/routes/annotations.yaml"
+        ]
+    },
+    "doctrine/lexer": {
+        "version": "1.2.0"
+    },
     "php": {
         "version": "7.3"
     },
@@ -16,6 +31,21 @@
     },
     "ramsey/uuid": {
         "version": "3.9.2"
+    },
+    "sensio/framework-extra-bundle": {
+        "version": "5.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "5.2",
+            "ref": "fb7e19da7f013d0d422fa9bce16f5c510e27609b"
+        },
+        "files": [
+            "config/packages/sensio_framework_extra.yaml"
+        ]
+    },
+    "symfony/browser-kit": {
+        "version": "v5.0.2"
     },
     "symfony/cache": {
         "version": "v5.0.2"
@@ -39,7 +69,13 @@
             "config/bootstrap.php"
         ]
     },
+    "symfony/css-selector": {
+        "version": "v5.0.2"
+    },
     "symfony/dependency-injection": {
+        "version": "v5.0.2"
+    },
+    "symfony/dom-crawler": {
         "version": "v5.0.2"
     },
     "symfony/dotenv": {
@@ -142,6 +178,9 @@
     },
     "symfony/service-contracts": {
         "version": "v2.0.1"
+    },
+    "symfony/test-pack": {
+        "version": "v1.0.6"
     },
     "symfony/var-dumper": {
         "version": "v5.0.2"
