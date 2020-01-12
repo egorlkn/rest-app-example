@@ -5,10 +5,8 @@ namespace App\Tests\Unit\Infrastructure\GetTaskCollectionForUser\TaskProvider;
 use App\Core\Domain\Task;
 use App\Core\Domain\User;
 use App\Infrastructure\GetTaskCollectionForUser\TaskProvider\FakeTaskCollectionProvider;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
-use Ramsey\Uuid\UuidInterface;
 
 /**
  * Class FakeTaskCollectionProviderTest
@@ -22,7 +20,7 @@ class FakeTaskCollectionProviderTest extends TestCase
     public function test(): void
     {
         $userId = Uuid::uuid4();
-        $user = $this->createUser($userId);
+        $user = new User($userId);
 
         $provider = new FakeTaskCollectionProvider();
 
@@ -36,19 +34,5 @@ class FakeTaskCollectionProviderTest extends TestCase
             ],
             $providerResult->getTaskCollection()->getArrayCopy()
         );
-    }
-
-    /**
-     * @param UuidInterface $userId
-     * @return User
-     */
-    private function createUser(UuidInterface $userId): User
-    {
-        /** @var User|MockObject $user */
-        $user = $this->createMock(User::class);
-
-        $user->expects($this->once())->method('getId')->willReturn($userId);
-
-        return $user;
     }
 }

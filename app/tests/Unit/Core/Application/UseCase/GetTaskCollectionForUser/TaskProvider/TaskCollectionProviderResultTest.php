@@ -3,9 +3,10 @@
 namespace App\Tests\Unit\Core\Application\UseCase\GetTaskCollectionForUser\TaskProvider;
 
 use App\Core\Application\UseCase\GetTaskCollectionForUser\TaskProvider\TaskCollectionProviderResult;
+use App\Core\Domain\Task;
 use App\Core\Domain\TaskCollection;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Ramsey\Uuid\Uuid;
 
 /**
  * Class TaskCollectionProviderResultTest
@@ -13,10 +14,17 @@ use PHPUnit\Framework\TestCase;
  */
 class TaskCollectionProviderResultTest extends TestCase
 {
+    /**
+     * @throws \Exception
+     */
     public function test(): void
     {
-        /** @var TaskCollection|MockObject $taskCollection */
-        $taskCollection = $this->createMock(TaskCollection::class);
+        $taskCollection = new TaskCollection(
+            [
+                new Task(Uuid::uuid4(), 'Task one', Uuid::uuid4()),
+                new Task(Uuid::uuid4(), 'Task one', Uuid::uuid4()),
+            ]
+        );
 
         $result = new TaskCollectionProviderResult($taskCollection);
 

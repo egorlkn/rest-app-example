@@ -10,7 +10,6 @@ use App\Infrastructure\GetTaskCollectionForUser\RequestHandler\RestApiHandler;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
-use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -41,16 +40,13 @@ class RestApiHandlerTest extends TestCase
      */
     public function testGetTaskCollectionForUser(): void
     {
-        $taskOneId = Uuid::uuid4();
-        $taskOneName = 'Test task one';
+        $taskOne = new Task(Uuid::uuid4(), 'Task one', Uuid::uuid4());
+        $taskTwo = new Task(Uuid::uuid4(), 'Task two', Uuid::uuid4());
 
-        $taskTwoId = Uuid::uuid4();
-        $taskTwoName = 'Test task one';
-
-        $taskCollection = $this->createTaskCollectionMock(
+        $taskCollection = new TaskCollection(
             [
-                $this->createTaskMock($taskOneId, $taskOneName),
-                $this->createTaskMock($taskTwoId, $taskTwoName),
+                $taskOne,
+                $taskTwo,
             ]
         );
 
@@ -71,81 +67,11 @@ class RestApiHandlerTest extends TestCase
         $this->assertEquals(
             new JsonResponse(
                 [
-                    [
-                        'id' => $taskOneId,
-                        'name' => $taskOneName,
-                    ],
-                    [
-                        'id' => $taskTwoId,
-                        'name' => $taskTwoName,
-                    ],
+                    $taskOne->toArray(),
+                    $taskTwo->toArray(),
                 ]
             ),
             $response
         );
-    }
-
-    /**
-     * @param UuidInterface $id
-     * @param string $name
-     * @return Task|MockObject
-     */
-    private function createTaskMock(UuidInterface $id, string $name)
-    {
-        /** @var Task|MockObject $task */
-        $task = $this->createMock(Task::class);
-
-        $task->expects($this->once())->method('toArray')->willReturn(
-            [
-                'id' => $id->toString(),
-                'name' => $name,
-            ]
-        );
-
-        return $task;
-    }
-
-    /**
-     * @param Task[]|MockObject[] $taskList
-     * @return TaskCollection|MockObject
-     */
-    private function createTaskCollectionMock(array $taskList)
-    {
-        $iterator = new \ArrayIterator($taskList);
-
-        /** @var TaskCollection|MockObject $taskCollection */
-        $taskCollection = $this->createMock(TaskCollection::class);
-
-        $taskCollection
-            ->method('rewind')
-            ->willReturnCallback(function () use ($iterator): void {
-                $iterator->rewind();
-            });
-
-        $taskCollection
-            ->method('current')
-            ->willReturnCallback(function () use ($iterator) {
-                return $iterator->current();
-            });
-
-        $taskCollection
-            ->method('key')
-            ->willReturnCallback(function () use ($iterator) {
-                return $iterator->key();
-            });
-
-        $taskCollection
-            ->method('next')
-            ->willReturnCallback(function () use ($iterator): void {
-                $iterator->next();
-            });
-
-        $taskCollection
-            ->method('valid')
-            ->willReturnCallback(function () use ($iterator): bool {
-                return $iterator->valid();
-            });
-
-        return $taskCollection;
     }
 }

@@ -5,6 +5,7 @@ namespace App\Tests\Unit\Core\Domain;
 use App\Core\Domain\Task;
 use App\Core\Domain\TaskCollection;
 use PHPUnit\Framework\TestCase;
+use Ramsey\Uuid\Uuid;
 
 /**
  * Class TaskCollectionTest
@@ -18,9 +19,8 @@ class TaskCollectionTest extends TestCase
     public function testConstruct(): void
     {
         $taskList = [
-            $this->createMock(Task::class),
-            $this->createMock(Task::class),
-            $this->createMock(Task::class),
+            new Task(Uuid::uuid4(), 'Task one', Uuid::uuid4()),
+            new Task(Uuid::uuid4(), 'Task one', Uuid::uuid4()),
         ];
 
         $taskCollection = new TaskCollection($taskList);
@@ -28,7 +28,7 @@ class TaskCollectionTest extends TestCase
         $this->assertSame($taskList, $taskCollection->getArrayCopy());
         $taskCollection->next();
         $this->assertSame($taskList[1], $taskCollection->current());
-        $this->assertSame($taskList[2], $taskCollection->offsetGet(2));
+        $this->assertSame($taskList[0], $taskCollection->offsetGet(0));
     }
 
     /**

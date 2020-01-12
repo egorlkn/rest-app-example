@@ -4,9 +4,11 @@ namespace App\Tests\Unit\Core\Application\UseCase\GetTaskCollectionForUser;
 
 use App\Core\Application\UseCase\GetTaskCollectionForUser\GetTaskCollectionForUserResult;
 use App\Core\Application\UseCase\GetTaskCollectionForUser\TaskProvider\TaskCollectionProviderResult;
+use App\Core\Domain\Task;
 use App\Core\Domain\TaskCollection;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Ramsey\Uuid\Uuid;
 
 /**
  * Class GetTaskCollectionForUserResultTest
@@ -14,14 +16,24 @@ use PHPUnit\Framework\TestCase;
  */
 class GetTaskCollectionForUserResultTest extends TestCase
 {
+    /**
+     * @throws \Exception
+     */
     public function test(): void
     {
+        $taskCollection = new TaskCollection(
+            [
+                new Task(Uuid::uuid4(), 'Task one', Uuid::uuid4()),
+                new Task(Uuid::uuid4(), 'Task two', Uuid::uuid4()),
+            ]
+        );
+
         /** @var TaskCollectionProviderResult|MockObject $taskCollectionProviderResult */
         $taskCollectionProviderResult = $this->createMock(TaskCollectionProviderResult::class);
-
-        /** @var TaskCollection|MockObject $taskCollection */
-        $taskCollection = $this->createMock(TaskCollection::class);
-        $taskCollectionProviderResult->expects($this->once())->method('getTaskCollection')->willReturn($taskCollection);
+        $taskCollectionProviderResult
+            ->expects($this->once())
+            ->method('getTaskCollection')
+            ->willReturn($taskCollection);
 
         $result = new GetTaskCollectionForUserResult($taskCollectionProviderResult);
 

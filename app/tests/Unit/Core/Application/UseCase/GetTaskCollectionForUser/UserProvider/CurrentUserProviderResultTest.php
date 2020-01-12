@@ -4,8 +4,8 @@ namespace App\Tests\Unit\Core\Application\UseCase\GetTaskCollectionForUser\UserP
 
 use App\Core\Application\UseCase\GetTaskCollectionForUser\UserProvider\CurrentUserProviderResult;
 use App\Core\Domain\User;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Ramsey\Uuid\Uuid;
 
 /**
  * Class CurrentUserProviderResultTest
@@ -13,10 +13,12 @@ use PHPUnit\Framework\TestCase;
  */
 class CurrentUserProviderResultTest extends TestCase
 {
+    /**
+     * @throws \Exception
+     */
     public function test(): void
     {
-        /** @var User|MockObject $user */
-        $user = $this->createMock(User::class);
+        $user = new User(Uuid::uuid4());
 
         $result = new CurrentUserProviderResult($user);
 

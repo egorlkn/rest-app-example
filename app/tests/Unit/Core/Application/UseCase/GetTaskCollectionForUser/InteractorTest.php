@@ -7,10 +7,12 @@ use App\Core\Application\UseCase\GetTaskCollectionForUser\TaskProvider\TaskColle
 use App\Core\Application\UseCase\GetTaskCollectionForUser\TaskProvider\TaskCollectionProviderResult;
 use App\Core\Application\UseCase\GetTaskCollectionForUser\UserProvider\CurrentUserProvider;
 use App\Core\Application\UseCase\GetTaskCollectionForUser\UserProvider\CurrentUserProviderResult;
+use App\Core\Domain\Task;
 use App\Core\Domain\TaskCollection;
 use App\Core\Domain\User;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Ramsey\Uuid\Uuid;
 
 /**
  * Class InteractorTest
@@ -46,14 +48,14 @@ class InteractorTest extends TestCase
      */
     public function testGetCollection(): void
     {
-        /**
-         * @var User|MockObject $user
-         * @var TaskCollection|MockObject $taskCollection
-         */
-        $user = $this->createMock(User::class);
-        $taskCollection = $this->createMock(TaskCollection::class);
+        $this->setupUserProvider();
 
-        $this->setupUserProvider($user);
+        $taskCollection = new TaskCollection(
+            [
+                new Task(Uuid::uuid4(), 'Task one', Uuid::uuid4()),
+                new Task(Uuid::uuid4(), 'Task one', Uuid::uuid4()),
+            ]
+        );
         $this->setupTaskProvider($taskCollection);
 
         $getTaskCollectionForUserResult = $this->interactor->getCollection();
@@ -62,10 +64,12 @@ class InteractorTest extends TestCase
     }
 
     /**
-     * @param User $user
+     * @throws \Exception
      */
-    private function setupUserProvider(User $user): void
+    private function setupUserProvider(): void
     {
+        $user = new User(Uuid::uuid4());
+
         $currentUserProviderResult = $this->createMock(CurrentUserProviderResult::class);
         $currentUserProviderResult
             ->expects($this->once())
