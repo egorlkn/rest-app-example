@@ -1,3 +1,7 @@
+An example of a small REST application that implements user story:
+
+"As a user, I want to have an ability to see a list of tasks for my day, so that I can do them one by one".
+
 #### How to start:
 
 ```bash
