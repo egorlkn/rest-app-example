@@ -10,6 +10,7 @@ use App\Core\Application\UseCase\GetTaskCollectionForUser\UserProvider\CurrentUs
 use App\Core\Domain\Task;
 use App\Core\Domain\TaskCollection;
 use App\Core\Domain\User;
+use Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
@@ -33,7 +34,7 @@ class InteractorTest extends TestCase
     /**
      * @var Interactor
      */
-    private $interactor;
+    private Interactor $interactor;
 
     protected function setUp(): void
     {
@@ -44,7 +45,7 @@ class InteractorTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testGetCollection(): void
     {
@@ -64,7 +65,7 @@ class InteractorTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     private function setupUserProvider(): void
     {

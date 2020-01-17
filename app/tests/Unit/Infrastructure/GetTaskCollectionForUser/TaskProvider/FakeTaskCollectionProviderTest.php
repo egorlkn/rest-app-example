@@ -5,6 +5,7 @@ namespace App\Tests\Unit\Infrastructure\GetTaskCollectionForUser\TaskProvider;
 use App\Core\Domain\Task;
 use App\Core\Domain\User;
 use App\Infrastructure\GetTaskCollectionForUser\TaskProvider\FakeTaskCollectionProvider;
+use Exception;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 
@@ -15,7 +16,7 @@ use Ramsey\Uuid\Uuid;
 class FakeTaskCollectionProviderTest extends TestCase
 {
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function test(): void
     {

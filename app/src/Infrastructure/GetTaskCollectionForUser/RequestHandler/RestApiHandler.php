@@ -16,7 +16,7 @@ class RestApiHandler extends AbstractController
     /**
      * @var GetTaskCollectionForUser
      */
-    private $useCase;
+    private GetTaskCollectionForUser $useCase;
 
     /**
      * RestApiHandler constructor.

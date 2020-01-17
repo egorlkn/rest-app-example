@@ -14,7 +14,7 @@ class GetTaskCollectionForUserResult
     /**
      * @var TaskCollectionProviderResult
      */
-    private $taskCollectionProviderResult;
+    private TaskCollectionProviderResult $taskCollectionProviderResult;
 
     /**
      * GetTaskCollectionForUserResult constructor.

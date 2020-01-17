@@ -2,6 +2,7 @@
 
 namespace App\Core\Domain;
 
+use ArrayIterator;
 use Webmozart\Assert\Assert;
 
 /**
@@ -12,7 +13,7 @@ use Webmozart\Assert\Assert;
  * @method Task offsetGet($index)
  * @method Task[] getArrayCopy()
  */
-class TaskCollection extends \ArrayIterator
+class TaskCollection extends ArrayIterator
 {
     /**
      * TaskCollection constructor.

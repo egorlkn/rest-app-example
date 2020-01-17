@@ -5,6 +5,7 @@ namespace App\Tests\Unit\Core\Application\UseCase\GetTaskCollectionForUser\TaskP
 use App\Core\Application\UseCase\GetTaskCollectionForUser\TaskProvider\TaskCollectionProviderResult;
 use App\Core\Domain\Task;
 use App\Core\Domain\TaskCollection;
+use Exception;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 
@@ -15,7 +16,7 @@ use Ramsey\Uuid\Uuid;
 class TaskCollectionProviderResultTest extends TestCase
 {
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function test(): void
     {

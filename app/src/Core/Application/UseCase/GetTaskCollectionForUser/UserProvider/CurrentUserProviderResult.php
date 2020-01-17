@@ -13,7 +13,7 @@ class CurrentUserProviderResult
     /**
      * @var User
      */
-    private $user;
+    private User $user;
 
     /**
      * CurrentUserProviderResult constructor.

@@ -7,6 +7,8 @@ use App\Core\Application\UseCase\GetTaskCollectionForUser\TaskProvider\TaskColle
 use App\Core\Domain\Task;
 use App\Core\Domain\TaskCollection;
 use App\Core\Domain\User;
+use Exception;
+use InvalidArgumentException;
 use Ramsey\Uuid\Exception\UnsatisfiedDependencyException;
 use Ramsey\Uuid\Uuid;
 
@@ -19,8 +21,8 @@ class FakeTaskCollectionProvider implements TaskCollectionProvider
     /**
      * @param User $user
      * @return TaskCollectionProviderResult
-     * @throws \InvalidArgumentException
-     * @throws \Exception
+     * @throws InvalidArgumentException
+     * @throws Exception
      */
     public function getCollectionByUser(User $user): TaskCollectionProviderResult
     {
@@ -33,8 +35,8 @@ class FakeTaskCollectionProvider implements TaskCollectionProvider
      * @param User $user
      * @return TaskCollection
      * @throws UnsatisfiedDependencyException
-     * @throws \InvalidArgumentException
-     * @throws \Exception
+     * @throws InvalidArgumentException
+     * @throws Exception
      */
     private function createTaskCollection(User $user): TaskCollection
     {

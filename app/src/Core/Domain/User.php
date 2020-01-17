@@ -13,7 +13,7 @@ class User
     /**
      * @var UuidInterface
      */
-    private $id;
+    private UuidInterface $id;
 
     /**
      * User constructor.

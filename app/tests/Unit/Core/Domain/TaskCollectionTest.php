@@ -4,8 +4,11 @@ namespace App\Tests\Unit\Core\Domain;
 
 use App\Core\Domain\Task;
 use App\Core\Domain\TaskCollection;
+use Exception;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
+use stdClass;
 
 /**
  * Class TaskCollectionTest
@@ -14,7 +17,7 @@ use Ramsey\Uuid\Uuid;
 class TaskCollectionTest extends TestCase
 {
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testConstruct(): void
     {
@@ -33,16 +36,16 @@ class TaskCollectionTest extends TestCase
 
     /**
      * @test
-     * @expectedException \InvalidArgumentException
+     * @expectedException InvalidArgumentException
      * @expectedExceptionMessage Expected an instance of App\Core\Domain\Task. Got: stdClass
      */
     public function throwWhenTaskListIsInvalid(): void
     {
         new TaskCollection(
             [
-                new \stdClass(),
-                new \stdClass(),
-                new \stdClass(),
+                new stdClass(),
+                new stdClass(),
+                new stdClass(),
             ]
         );
     }

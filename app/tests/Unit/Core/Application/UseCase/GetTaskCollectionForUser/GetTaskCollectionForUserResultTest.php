@@ -6,6 +6,7 @@ use App\Core\Application\UseCase\GetTaskCollectionForUser\GetTaskCollectionForUs
 use App\Core\Application\UseCase\GetTaskCollectionForUser\TaskProvider\TaskCollectionProviderResult;
 use App\Core\Domain\Task;
 use App\Core\Domain\TaskCollection;
+use Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
@@ -17,7 +18,7 @@ use Ramsey\Uuid\Uuid;
 class GetTaskCollectionForUserResultTest extends TestCase
 {
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function test(): void
     {

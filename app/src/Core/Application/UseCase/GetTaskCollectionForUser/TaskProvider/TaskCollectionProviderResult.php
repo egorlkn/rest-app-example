@@ -13,7 +13,7 @@ class TaskCollectionProviderResult
     /**
      * @var TaskCollection
      */
-    private $taskCollection;
+    private TaskCollection $taskCollection;
 
     /**
      * InteractorResult constructor.

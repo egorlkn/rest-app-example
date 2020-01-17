@@ -7,6 +7,7 @@ use App\Core\Application\UseCase\GetTaskCollectionForUser\GetTaskCollectionForUs
 use App\Core\Domain\Task;
 use App\Core\Domain\TaskCollection;
 use App\Infrastructure\GetTaskCollectionForUser\RequestHandler\RestApiHandler;
+use Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
@@ -26,7 +27,7 @@ class RestApiHandlerTest extends TestCase
     /**
      * @var RestApiHandler
      */
-    private $handler;
+    private RestApiHandler $handler;
 
     protected function setUp()
     {
@@ -36,7 +37,7 @@ class RestApiHandlerTest extends TestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function testGetTaskCollectionForUser(): void
     {

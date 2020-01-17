@@ -13,17 +13,17 @@ class Task
     /**
      * @var UuidInterface
      */
-    private $id;
+    private UuidInterface $id;
 
     /**
      * @var string
      */
-    private $name;
+    private string $name;
 
     /**
      * @var UuidInterface
      */
-    private $userId;
+    private UuidInterface $userId;
 
     /**
      * Task constructor.

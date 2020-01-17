@@ -14,12 +14,12 @@ class Interactor implements GetTaskCollectionForUser
     /**
      * @var CurrentUserProvider
      */
-    private $currentUserProvider;
+    private CurrentUserProvider $currentUserProvider;
 
     /**
      * @var TaskCollectionProvider
      */
-    private $taskCollectionProvider;
+    private TaskCollectionProvider $taskCollectionProvider;
 
     /**
      * Interactor constructor.

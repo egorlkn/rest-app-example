@@ -4,6 +4,7 @@ namespace App\Tests\Unit\Core\Application\UseCase\GetTaskCollectionForUser\UserP
 
 use App\Core\Application\UseCase\GetTaskCollectionForUser\UserProvider\CurrentUserProviderResult;
 use App\Core\Domain\User;
+use Exception;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 
@@ -14,7 +15,7 @@ use Ramsey\Uuid\Uuid;
 class CurrentUserProviderResultTest extends TestCase
 {
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function test(): void
     {

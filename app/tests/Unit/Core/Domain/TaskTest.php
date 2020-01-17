@@ -3,6 +3,7 @@
 namespace App\Tests\Unit\Core\Domain;
 
 use App\Core\Domain\Task;
+use Exception;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 
@@ -13,7 +14,7 @@ use Ramsey\Uuid\Uuid;
 class TaskTest extends TestCase
 {
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function test(): void
     {
