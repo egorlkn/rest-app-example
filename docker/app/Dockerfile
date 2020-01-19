@@ -14,4 +14,11 @@ RUN apk update \
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
+ARG USER_ID
+ARG GROUP_ID
+
+RUN apk add shadow && usermod -u ${USER_ID} www-data && groupmod -g ${GROUP_ID} www-data
+
+USER "${USER_ID}:${GROUP_ID}"
+
 EXPOSE 9000

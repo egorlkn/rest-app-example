@@ -9,6 +9,8 @@ services:
       context: ./docker/app
       args:
         XDEBUG_HOST: "192.168.250.1"
+        USER_ID: "1000"
+        GROUP_ID: "1000"
     volumes:
       - ./app:/var/www/app
     working_dir: /var/www/app
@@ -30,4 +32,4 @@ networks:
     ipam:
       driver: default
       config:
-        - subnet: 192.168.250.0/28
+        - subnet: "192.168.250.0/28"
