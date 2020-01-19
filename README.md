@@ -9,15 +9,15 @@ docker-compose up -d --build
 ```
 
 ```bash
-docker-compose exec -u $UID app composer install -o --no-cache
+docker-compose logs -f app
 ```
 
-Go to [localhost:8080/api/1/task/list](http://localhost:8080/api/1/task/list)
+When vendors installation via composer will be finished go to [localhost:8080/api/1/task/list](http://localhost:8080/api/1/task/list)
 
 #### How to run tests:
 
 ```bash
-docker-compose exec -u $UID app vendor/bin/simple-phpunit
+docker-compose exec app vendor/bin/simple-phpunit
 ```
 
 #### How to stop:

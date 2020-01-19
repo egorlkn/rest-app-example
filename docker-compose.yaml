@@ -13,7 +13,9 @@ services:
         GROUP_ID: "1000"
     volumes:
       - ./app:/var/www/app
+      - ./entrypoint.sh:/usr/local/bin/entrypoint.sh:ro
     working_dir: /var/www/app
+    entrypoint: ['sh', '/usr/local/bin/entrypoint.sh']
 
   nginx:
     container_name: todo-list-app-webserver
