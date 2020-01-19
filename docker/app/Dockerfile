@@ -1,14 +1,17 @@
+FROM composer:1.9.1 AS composer
 FROM php:7.4.1-fpm-alpine3.11
 
-RUN apk update && \
-    apk upgrade && \
-    apk add icu-dev && \
-    docker-php-ext-install intl opcache
+ARG XDEBUG_HOST
 
-RUN wget https://getcomposer.org/installer -O composer-setup.php && \
-    php composer-setup.php --version=1.9.1 && \
-    rm -f composer-setup.php && \
-    chmod +x composer.phar && \
-    mv composer.phar /usr/bin/composer
+RUN apk update \
+    && apk upgrade \
+    && apk add icu-dev $PHPIZE_DEPS \
+    && docker-php-ext-install intl opcache \
+    && pecl install xdebug-2.9.1 \
+    && docker-php-ext-enable xdebug \
+    && echo "xdebug.remote_host=$XDEBUG_HOST" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.remote_enable=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+
+COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 EXPOSE 9000

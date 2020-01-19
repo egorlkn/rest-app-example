@@ -3,7 +3,12 @@ version: "3.7"
 services:
   app:
     container_name: todo-list-app
-    build: ./docker/app
+    environment:
+      PHP_IDE_CONFIG: "serverName=Todo-list Docker"
+    build:
+      context: ./docker/app
+      args:
+        XDEBUG_HOST: "192.168.250.1"
     volumes:
       - ./app:/var/www/app
     working_dir: /var/www/app
@@ -18,3 +23,11 @@ services:
       - ./docker/nginx/app.conf:/etc/nginx/conf.d/default.conf:ro
     ports:
       - "8080:80"
+
+networks:
+  default:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.250.0/28
