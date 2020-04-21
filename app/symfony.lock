@@ -32,6 +32,9 @@
     "ramsey/uuid": {
         "version": "3.9.2"
     },
+    "roave/security-advisories": {
+        "version": "dev-master"
+    },
     "sensio/framework-extra-bundle": {
         "version": "5.2",
         "recipe": {
