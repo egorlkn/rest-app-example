@@ -14,10 +14,13 @@ class RestApiHandlerTest extends WebTestCase
     public function testGetTaskCollectionForUser(): void
     {
         $client = static::createClient();
-
         $client->request('GET', '/api/1/task/list');
-        $response = $client->getResponse();
 
+        $response = $client->getResponse();
         $this->assertTrue($response->isSuccessful());
+
+        $content = $response->getContent();
+        $this->assertNotEmpty($content);
+        $this->assertJson($content);
     }
 }

@@ -1,5 +1,5 @@
-FROM composer:1.9.1 AS composer
-FROM php:7.4.1-fpm-alpine3.11
+FROM composer:1.10.5 AS composer
+FROM php:7.4.5-fpm-alpine3.11
 
 ARG XDEBUG_HOST
 

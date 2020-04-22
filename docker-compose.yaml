@@ -19,7 +19,7 @@ services:
 
   nginx:
     container_name: todo-list-app-webserver
-    image: nginx:1.17.6-alpine
+    image: nginx:1.17.10-alpine
     depends_on:
       - app
     volumes:
