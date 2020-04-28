@@ -39,7 +39,7 @@ class GetTaskListTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testGetTaskCollectionForUser(): void
+    public function testGetTaskList(): void
     {
         $taskOne = new Task(Uuid::uuid4(), 'Task one', Uuid::uuid4());
         $taskTwo = new Task(Uuid::uuid4(), 'Task two', Uuid::uuid4());

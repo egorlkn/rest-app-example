@@ -2,9 +2,9 @@
 
 namespace App\Infrastructure\UserProvider;
 
+use App\Application\Component\UserProvider\CurrentUserProvider;
+use App\Application\Component\UserProvider\CurrentUserProviderResult;
 use App\Application\Domain\User;
-use App\Application\UseCase\GetTaskCollection\UserProvider\CurrentUserProvider;
-use App\Application\UseCase\GetTaskCollection\UserProvider\CurrentUserProviderResult;
 use Ramsey\Uuid\Uuid;
 
 /**

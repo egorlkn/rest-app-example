@@ -2,14 +2,14 @@
 
 namespace App\Tests\Unit\Application\UseCase\GetTaskCollection;
 
+use App\Application\Component\UserProvider\CurrentUserProvider;
+use App\Application\Component\UserProvider\CurrentUserProviderResult;
 use App\Application\Domain\Task;
 use App\Application\Domain\TaskCollection;
 use App\Application\Domain\User;
 use App\Application\UseCase\GetTaskCollection\Interactor;
 use App\Application\UseCase\GetTaskCollection\TaskProvider\TaskCollectionProvider;
 use App\Application\UseCase\GetTaskCollection\TaskProvider\TaskCollectionProviderResult;
-use App\Application\UseCase\GetTaskCollection\UserProvider\CurrentUserProvider;
-use App\Application\UseCase\GetTaskCollection\UserProvider\CurrentUserProviderResult;
 use Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;

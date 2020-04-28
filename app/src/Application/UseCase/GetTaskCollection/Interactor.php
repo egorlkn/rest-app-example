@@ -2,8 +2,8 @@
 
 namespace App\Application\UseCase\GetTaskCollection;
 
+use App\Application\Component\UserProvider\CurrentUserProvider;
 use App\Application\UseCase\GetTaskCollection\TaskProvider\TaskCollectionProvider;
-use App\Application\UseCase\GetTaskCollection\UserProvider\CurrentUserProvider;
 
 /**
  * Class Interactor

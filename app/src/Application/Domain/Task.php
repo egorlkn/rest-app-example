@@ -38,6 +38,30 @@ class Task
         $this->userId = $userId;
     }
 
+    /**
+     * @return UuidInterface
+     */
+    public function getId(): UuidInterface
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return UuidInterface
+     */
+    public function getUserId(): UuidInterface
+    {
+        return $this->userId;
+    }
+
     public function toArray(): array
     {
         return [

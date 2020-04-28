@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace App\Application\UseCase\GetTaskCollection\UserProvider;
+namespace App\Application\Component\UserProvider;
 
 use App\Application\Domain\User;
 
 /**
  * Class CurrentUserProviderResult
- * @package App\Application\UseCase\GetTaskCollection\UserProvider
+ * @package App\Application\Component\UserProvider
  */
 class CurrentUserProviderResult
 {

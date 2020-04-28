@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace App\Application\UseCase\GetTaskCollection\UserProvider;
+namespace App\Application\Component\UserProvider;
 
 /**
  * Interface CurrentUserProvider
- * @package App\Application\UseCase\GetTaskCollection\UserProvider
+ * @package App\Application\Component\UserProvider
  */
 interface CurrentUserProvider
 {
