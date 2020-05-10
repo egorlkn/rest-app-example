@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace App\Application\UseCase\GetTaskCollection\TaskProvider;
+namespace App\Application\UseCase\GetTaskCollection\TaskCollectionProvider;
 
 use App\Application\Domain\TaskCollection;
 
 /**
  * Class TaskCollectionProviderResult
- * @package App\Application\UseCase\GetTaskCollection\TaskProvider
+ * @package App\Application\UseCase\GetTaskCollection\TaskCollectionProvider
  */
 class TaskCollectionProviderResult
 {

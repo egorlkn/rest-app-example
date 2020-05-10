@@ -3,7 +3,7 @@
 namespace App\Application\UseCase\GetTaskCollection;
 
 use App\Application\Domain\TaskCollection;
-use App\Application\UseCase\GetTaskCollection\TaskProvider\TaskCollectionProviderResult;
+use App\Application\UseCase\GetTaskCollection\TaskCollectionProvider\TaskCollectionProviderResult;
 
 /**
  * Class GetTaskCollectionResult

@@ -5,7 +5,7 @@ namespace App\Tests\Unit\Application\UseCase\GetTaskCollection;
 use App\Application\Domain\Task;
 use App\Application\Domain\TaskCollection;
 use App\Application\UseCase\GetTaskCollection\GetTaskCollectionResult;
-use App\Application\UseCase\GetTaskCollection\TaskProvider\TaskCollectionProviderResult;
+use App\Application\UseCase\GetTaskCollection\TaskCollectionProvider\TaskCollectionProviderResult;
 use Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;

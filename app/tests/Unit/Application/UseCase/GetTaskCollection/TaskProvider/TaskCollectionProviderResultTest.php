@@ -4,14 +4,14 @@ namespace App\Tests\Unit\Application\UseCase\GetTaskCollection\TaskProvider;
 
 use App\Application\Domain\Task;
 use App\Application\Domain\TaskCollection;
-use App\Application\UseCase\GetTaskCollection\TaskProvider\TaskCollectionProviderResult;
+use App\Application\UseCase\GetTaskCollection\TaskCollectionProvider\TaskCollectionProviderResult;
 use Exception;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 
 /**
  * Class TaskCollectionProviderResultTest
- * @package App\Tests\Unit\Application\UseCase\GetTaskCollection\TaskProvider
+ * @package App\Tests\Unit\Application\UseCase\GetTaskCollection\TaskCollectionProvider
  */
 class TaskCollectionProviderResultTest extends TestCase
 {

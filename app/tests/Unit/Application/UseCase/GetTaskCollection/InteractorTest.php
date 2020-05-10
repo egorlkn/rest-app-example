@@ -8,8 +8,8 @@ use App\Application\Domain\Task;
 use App\Application\Domain\TaskCollection;
 use App\Application\Domain\User;
 use App\Application\UseCase\GetTaskCollection\Interactor;
-use App\Application\UseCase\GetTaskCollection\TaskProvider\TaskCollectionProvider;
-use App\Application\UseCase\GetTaskCollection\TaskProvider\TaskCollectionProviderResult;
+use App\Application\UseCase\GetTaskCollection\TaskCollectionProvider\TaskCollectionProvider;
+use App\Application\UseCase\GetTaskCollection\TaskCollectionProvider\TaskCollectionProviderResult;
 use Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -98,7 +98,7 @@ class InteractorTest extends TestCase
         $this
             ->taskCollectionProvider
             ->expects($this->once())
-            ->method('getCollectionByUser')
+            ->method('getCollection')
             ->willReturn($taskCollectionProviderResult);
     }
 }

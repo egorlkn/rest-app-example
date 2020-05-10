@@ -1,31 +1,31 @@
 <?php declare(strict_types=1);
 
-namespace App\Tests\Unit\Infrastructure\TaskProvider;
+namespace App\Tests\Unit\Infrastructure\TaskCollectionProvider;
 
 use App\Application\Domain\Task;
 use App\Application\Domain\User;
-use App\Infrastructure\TaskProvider\FakeTaskCollectionProvider;
+use App\Infrastructure\TaskCollectionProvider\FakeTaskCollectionProvider;
 use Exception;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
 
 /**
  * Class FakeTaskCollectionProviderTest
- * @package App\Tests\Unit\Infrastructure\TaskProvider
+ * @package App\Tests\Unit\Infrastructure\TaskCollectionProvider
  */
 class FakeTaskCollectionProviderTest extends TestCase
 {
     /**
      * @throws Exception
      */
-    public function test(): void
+    public function testGetCollection(): void
     {
         $userId = Uuid::uuid4();
         $user = new User($userId);
 
         $provider = new FakeTaskCollectionProvider();
 
-        $providerResult = $provider->getCollectionByUser($user);
+        $providerResult = $provider->getCollection($user);
 
         $this->assertEquals(
             [

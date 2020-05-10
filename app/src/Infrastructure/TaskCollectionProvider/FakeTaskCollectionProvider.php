@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace App\Infrastructure\TaskProvider;
+namespace App\Infrastructure\TaskCollectionProvider;
 
 use App\Application\Domain\Task;
 use App\Application\Domain\TaskCollection;
 use App\Application\Domain\User;
-use App\Application\UseCase\GetTaskCollection\TaskProvider\TaskCollectionProvider;
-use App\Application\UseCase\GetTaskCollection\TaskProvider\TaskCollectionProviderResult;
+use App\Application\UseCase\GetTaskCollection\TaskCollectionProvider\TaskCollectionProvider;
+use App\Application\UseCase\GetTaskCollection\TaskCollectionProvider\TaskCollectionProviderResult;
 use Exception;
 use InvalidArgumentException;
 use Ramsey\Uuid\Exception\UnsatisfiedDependencyException;
@@ -14,7 +14,7 @@ use Ramsey\Uuid\Uuid;
 
 /**
  * Class FakeTaskCollectionProvider
- * @package App\Infrastructure\TaskProvider
+ * @package App\Infrastructure\TaskCollectionProvider
  */
 class FakeTaskCollectionProvider implements TaskCollectionProvider
 {
@@ -24,7 +24,7 @@ class FakeTaskCollectionProvider implements TaskCollectionProvider
      * @throws InvalidArgumentException
      * @throws Exception
      */
-    public function getCollectionByUser(User $user): TaskCollectionProviderResult
+    public function getCollection(User $user): TaskCollectionProviderResult
     {
         $taskCollection = $this->createTaskCollection($user);
 
