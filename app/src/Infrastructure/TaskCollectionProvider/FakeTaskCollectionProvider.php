@@ -2,11 +2,11 @@
 
 namespace App\Infrastructure\TaskCollectionProvider;
 
+use App\Application\Component\TaskCollectionProvider\TaskCollectionProvider;
+use App\Application\Component\TaskCollectionProvider\TaskCollectionProviderResult;
 use App\Application\Domain\Task;
 use App\Application\Domain\TaskCollection;
 use App\Application\Domain\User;
-use App\Application\UseCase\GetTaskCollection\TaskCollectionProvider\TaskCollectionProvider;
-use App\Application\UseCase\GetTaskCollection\TaskCollectionProvider\TaskCollectionProviderResult;
 use Exception;
 use InvalidArgumentException;
 use Ramsey\Uuid\Exception\UnsatisfiedDependencyException;

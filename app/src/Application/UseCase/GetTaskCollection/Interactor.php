@@ -2,8 +2,8 @@
 
 namespace App\Application\UseCase\GetTaskCollection;
 
+use App\Application\Component\TaskCollectionProvider\TaskCollectionProvider;
 use App\Application\Component\UserProvider\CurrentUserProvider;
-use App\Application\UseCase\GetTaskCollection\TaskCollectionProvider\TaskCollectionProvider;
 
 /**
  * Class Interactor
@@ -44,7 +44,8 @@ class Interactor implements GetTaskCollection
         $taskCollectionProviderResult = $this->taskCollectionProvider->getCollection(
             $currentUserProviderResult->getUser()
         );
+        $taskCollection = $taskCollectionProviderResult->getTaskCollection();
 
-        return new GetTaskCollectionResult($taskCollectionProviderResult);
+        return new GetTaskCollectionResult($taskCollection);
     }
 }

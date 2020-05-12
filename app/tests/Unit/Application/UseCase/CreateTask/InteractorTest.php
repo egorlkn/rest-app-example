@@ -2,13 +2,13 @@
 
 namespace App\Tests\Unit\Application\UseCase\CreateTask;
 
+use App\Application\Component\TaskSaver\TaskSaver;
+use App\Application\Component\TaskSaver\TaskSaverResult;
 use App\Application\Component\UserProvider\CurrentUserProvider;
 use App\Application\Component\UserProvider\CurrentUserProviderResult;
 use App\Application\Domain\Task;
 use App\Application\Domain\User;
 use App\Application\UseCase\CreateTask\Interactor;
-use App\Application\UseCase\CreateTask\TaskSaver\TaskSaver;
-use App\Application\UseCase\CreateTask\TaskSaver\TaskSaverResult;
 use Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;

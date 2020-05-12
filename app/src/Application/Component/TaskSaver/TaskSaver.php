@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace App\Application\UseCase\CreateTask\TaskSaver;
+namespace App\Application\Component\TaskSaver;
 
 use App\Application\Domain\Task;
 
 /**
  * Interface TaskSaver
- * @package App\Application\UseCase\TaskSaver
+ * @package App\Application\Component\TaskSaver
  */
 interface TaskSaver
 {

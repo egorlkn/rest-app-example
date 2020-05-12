@@ -2,9 +2,9 @@
 
 namespace App\Application\UseCase\CreateTask;
 
+use App\Application\Component\TaskSaver\TaskSaver;
 use App\Application\Component\UserProvider\CurrentUserProvider;
 use App\Application\Domain\Task;
-use App\Application\UseCase\CreateTask\TaskSaver\TaskSaver;
 use Exception;
 use Ramsey\Uuid\Uuid;
 

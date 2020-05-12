@@ -2,14 +2,14 @@
 
 namespace App\Tests\Unit\Application\UseCase\GetTaskCollection;
 
+use App\Application\Component\TaskCollectionProvider\TaskCollectionProvider;
+use App\Application\Component\TaskCollectionProvider\TaskCollectionProviderResult;
 use App\Application\Component\UserProvider\CurrentUserProvider;
 use App\Application\Component\UserProvider\CurrentUserProviderResult;
 use App\Application\Domain\Task;
 use App\Application\Domain\TaskCollection;
 use App\Application\Domain\User;
 use App\Application\UseCase\GetTaskCollection\Interactor;
-use App\Application\UseCase\GetTaskCollection\TaskCollectionProvider\TaskCollectionProvider;
-use App\Application\UseCase\GetTaskCollection\TaskCollectionProvider\TaskCollectionProviderResult;
 use Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -59,9 +59,9 @@ class InteractorTest extends TestCase
         );
         $this->setupTaskProvider($taskCollection);
 
-        $getTaskCollectionForUserResult = $this->interactor->getCollection();
+        $getTaskCollectionResult = $this->interactor->getCollection();
 
-        $this->assertSame($taskCollection, $getTaskCollectionForUserResult->getTaskCollection());
+        $this->assertSame($taskCollection, $getTaskCollectionResult->getTaskCollection());
     }
 
     /**

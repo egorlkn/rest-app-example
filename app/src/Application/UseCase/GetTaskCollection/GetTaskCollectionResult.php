@@ -3,7 +3,6 @@
 namespace App\Application\UseCase\GetTaskCollection;
 
 use App\Application\Domain\TaskCollection;
-use App\Application\UseCase\GetTaskCollection\TaskCollectionProvider\TaskCollectionProviderResult;
 
 /**
  * Class GetTaskCollectionResult
@@ -11,18 +10,15 @@ use App\Application\UseCase\GetTaskCollection\TaskCollectionProvider\TaskCollect
  */
 class GetTaskCollectionResult
 {
-    /**
-     * @var TaskCollectionProviderResult
-     */
-    private TaskCollectionProviderResult $taskCollectionProviderResult;
+    private TaskCollection $taskCollection;
 
     /**
      * GetTaskCollectionResult constructor.
-     * @param TaskCollectionProviderResult $taskCollectionProviderResult
+     * @param TaskCollection $taskCollection
      */
-    public function __construct(TaskCollectionProviderResult $taskCollectionProviderResult)
+    public function __construct(TaskCollection $taskCollection)
     {
-        $this->taskCollectionProviderResult = $taskCollectionProviderResult;
+        $this->taskCollection = $taskCollection;
     }
 
     /**
@@ -30,6 +26,6 @@ class GetTaskCollectionResult
      */
     public function getTaskCollection(): TaskCollection
     {
-        return $this->taskCollectionProviderResult->getTaskCollection();
+        return $this->taskCollection;
     }
 }

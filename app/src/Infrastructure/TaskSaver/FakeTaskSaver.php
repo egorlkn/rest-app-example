@@ -2,9 +2,9 @@
 
 namespace App\Infrastructure\TaskSaver;
 
+use App\Application\Component\TaskSaver\TaskSaver;
+use App\Application\Component\TaskSaver\TaskSaverResult;
 use App\Application\Domain\Task;
-use App\Application\UseCase\CreateTask\TaskSaver\TaskSaver;
-use App\Application\UseCase\CreateTask\TaskSaver\TaskSaverResult;
 
 /**
  * Class FakeTaskSaver
