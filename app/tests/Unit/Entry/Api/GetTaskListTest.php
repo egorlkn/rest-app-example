@@ -51,11 +51,7 @@ class GetTaskListTest extends TestCase
             ]
         );
 
-        $useCaseResult = $this->createMock(GetTaskCollectionResult::class);
-        $useCaseResult
-            ->expects($this->once())
-            ->method('getTaskCollection')
-            ->willReturn($taskCollection);
+        $useCaseResult = new GetTaskCollectionResult($taskCollection);
 
         $this
             ->useCase

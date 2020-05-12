@@ -44,11 +44,7 @@ class CreateTaskTest extends TestCase
         $taskName = 'Task name';
         $task = new Task(Uuid::uuid4(), $taskName, Uuid::uuid4());
 
-        $useCaseResult = $this->createMock(CreateTaskResult::class);
-        $useCaseResult
-            ->expects($this->once())
-            ->method('getTask')
-            ->willReturn($task);
+        $useCaseResult = new CreateTaskResult($task);
 
         $this
             ->useCase

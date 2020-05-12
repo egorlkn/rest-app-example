@@ -69,12 +69,7 @@ class InteractorTest extends TestCase
     private function setupUserProvider(UuidInterface $uuid): void
     {
         $user = new User($uuid);
-
-        $currentUserProviderResult = $this->createMock(CurrentUserProviderResult::class);
-        $currentUserProviderResult
-            ->expects($this->once())
-            ->method('getUser')
-            ->willReturn($user);
+        $currentUserProviderResult = new CurrentUserProviderResult($user);
 
         $this
             ->currentUserProvider
@@ -91,12 +86,7 @@ class InteractorTest extends TestCase
     private function setupTaskSaver(string $taskName, UuidInterface $userUuid): void
     {
         $savedTask = new Task(Uuid::uuid4(), $taskName, $userUuid);
-
-        $taskSaverResult = $this->createMock(TaskSaverResult::class);
-        $taskSaverResult
-            ->expects($this->once())
-            ->method('getTask')
-            ->willReturn($savedTask);
+        $taskSaverResult = new TaskSaverResult($savedTask);
 
         $this
             ->taskSaver
