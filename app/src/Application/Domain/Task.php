@@ -26,16 +26,23 @@ class Task
     private UuidInterface $userId;
 
     /**
+     * @var bool
+     */
+    private bool $deleted;
+
+    /**
      * Task constructor.
      * @param UuidInterface $id
      * @param string $name
      * @param UuidInterface $userId
+     * @param bool $deleted
      */
-    public function __construct(UuidInterface $id, string $name, UuidInterface $userId)
+    public function __construct(UuidInterface $id, string $name, UuidInterface $userId, bool $deleted = false)
     {
         $this->id = $id;
         $this->name = $name;
         $this->userId = $userId;
+        $this->deleted = $deleted;
     }
 
     /**
@@ -60,6 +67,14 @@ class Task
     public function getUserId(): UuidInterface
     {
         return $this->userId;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDeleted(): bool
+    {
+        return $this->deleted;
     }
 
     public function toArray(): array

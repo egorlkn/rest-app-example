@@ -12,7 +12,8 @@ interface TaskCollectionProvider
 {
     /**
      * @param User $user
+     * @param bool $includeDeleted
      * @return TaskCollectionProviderResult
      */
-    public function getCollection(User $user): TaskCollectionProviderResult;
+    public function getCollection(User $user, bool $includeDeleted = false): TaskCollectionProviderResult;
 }

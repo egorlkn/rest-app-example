@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace App\Tests\Unit\Application\UseCase\UpdateTask;
+namespace App\Tests\Unit\Application\UseCase\DeleteTask;
 
 use App\Application\Component\TaskProvider\TaskProvider;
 use App\Application\Component\TaskProvider\TaskProviderResult;
@@ -10,9 +10,8 @@ use App\Application\Component\UserProvider\CurrentUserProvider;
 use App\Application\Component\UserProvider\CurrentUserProviderResult;
 use App\Application\Domain\Task;
 use App\Application\Domain\User;
-use App\Application\UseCase\UpdateTask\Interactor;
+use App\Application\UseCase\DeleteTask\Interactor;
 use Exception;
-use LogicException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
@@ -20,14 +19,14 @@ use Ramsey\Uuid\UuidInterface;
 
 /**
  * Class InteractorTest
- * @package App\Tests\Unit\Application\UseCase\UpdateTask
+ * @package App\Tests\Unit\Application\UseCase\DeleteTask
  */
 class InteractorTest extends TestCase
 {
     /**
      * @var CurrentUserProvider|MockObject
      */
-    private $currentUserProvider;
+    private $userProvider;
 
     /**
      * @var TaskProvider|MockObject
@@ -37,7 +36,7 @@ class InteractorTest extends TestCase
     /**
      * @var TaskSaver|MockObject
      */
-    private $taskSaver;
+    private TaskSaver $taskSaver;
 
     /**
      * @var Interactor
@@ -46,12 +45,12 @@ class InteractorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->currentUserProvider = $this->createMock(CurrentUserProvider::class);
+        $this->userProvider = $this->createMock(CurrentUserProvider::class);
         $this->taskProvider = $this->createMock(TaskProvider::class);
         $this->taskSaver = $this->createMock(TaskSaver::class);
 
         $this->interactor = new Interactor(
-            $this->currentUserProvider,
+            $this->userProvider,
             $this->taskProvider,
             $this->taskSaver
         );
@@ -60,42 +59,33 @@ class InteractorTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testUpdateTask(): void
+    public function testDeleteTaskWithSuccessfulResult(): void
     {
         $userUuid = Uuid::uuid4();
         $this->setupUserProvider($userUuid);
 
         $taskUuid = Uuid::uuid4();
-        $this->setupTaskProviderWithSuccessfulResult($taskUuid, $userUuid);
+        $this->setupTaskProviderWithSuccessfulResult($taskUuid);
 
-        $newTaskName = 'New task one';
-        $this->setupTaskSaver($taskUuid, $newTaskName, $userUuid);
+        $this->setupTaskSaver($taskUuid, $userUuid);
 
-        $updateTaskResult = $this->interactor->updateTask($taskUuid, $newTaskName);
-        $this->assertTrue($updateTaskResult->isSuccessful());
+        $deleteTaskResult = $this->interactor->deleteTask($taskUuid);
 
-        $updatedTask = $updateTaskResult->getTask();
-        $this->assertSame($taskUuid, $updatedTask->getId());
-        $this->assertSame($newTaskName, $updatedTask->getName());
-        $this->assertSame($userUuid, $updatedTask->getUserId());
-        $this->assertFalse($updatedTask->isDeleted());
+        $this->assertTrue($deleteTaskResult->isSuccessful());
     }
 
     /**
      * @throws Exception
      */
-    public function testFailedUpdateTask(): void
+    public function testDeleteTaskWithFailedResult(): void
     {
         $this->setupUserProvider(Uuid::uuid4());
 
         $this->setupTaskProviderWithFailedResult();
 
-        $updateTaskResult = $this->interactor->updateTask(Uuid::uuid4(), 'New task one');
-        $this->assertFalse($updateTaskResult->isSuccessful());
+        $deleteTaskResult = $this->interactor->deleteTask(Uuid::uuid4());
 
-        $this->expectException(LogicException::class);
-        $this->expectExceptionMessage('Can not get Task from failed result');
-        $updateTaskResult->getTask();
+        $this->assertFalse($deleteTaskResult->isSuccessful());
     }
 
     /**
@@ -104,50 +94,49 @@ class InteractorTest extends TestCase
     private function setupUserProvider(UuidInterface $uuid): void
     {
         $user = new User($uuid);
-        $currentUserProviderResult = new CurrentUserProviderResult($user);
+
+        $getUserResult = new CurrentUserProviderResult($user);
 
         $this
-            ->currentUserProvider
+            ->userProvider
             ->expects($this->once())
             ->method('getCurrentUser')
-            ->willReturn($currentUserProviderResult);
+            ->willReturn($getUserResult);
     }
 
     /**
-     * @param UuidInterface $taskUuid
-     * @param UuidInterface $userUuid
+     * @param UuidInterface $uuid
+     * @throws Exception
      */
-    private function setupTaskProviderWithSuccessfulResult(UuidInterface $taskUuid, UuidInterface $userUuid): void
+    private function setupTaskProviderWithSuccessfulResult(UuidInterface $uuid): void
     {
-        $task = new Task($taskUuid, 'Task one', $userUuid);
-        $taskProviderResult = TaskProviderResult::createSuccessfulResult($task);
+        $task = new Task($uuid, 'Task name', Uuid::uuid4());
+
+        $getTaskResult = TaskProviderResult::createSuccessfulResult($task);
 
         $this
             ->taskProvider
             ->expects($this->once())
             ->method('getTask')
-            ->willReturn($taskProviderResult);
+            ->willReturn($getTaskResult);
     }
 
     private function setupTaskProviderWithFailedResult(): void
     {
-        $taskProviderFailedResult = TaskProviderResult::createFailedResult();
-
         $this
             ->taskProvider
             ->expects($this->once())
             ->method('getTask')
-            ->willReturn($taskProviderFailedResult);
+            ->willReturn(TaskProviderResult::createFailedResult());
     }
 
     /**
      * @param UuidInterface $taskUuid
-     * @param string $taskName
      * @param UuidInterface $userUuid
      */
-    private function setupTaskSaver(UuidInterface $taskUuid, string $taskName, UuidInterface $userUuid): void
+    private function setupTaskSaver(UuidInterface $taskUuid, UuidInterface $userUuid): void
     {
-        $savedTask = new Task($taskUuid, $taskName, $userUuid);
+        $savedTask = new Task($taskUuid, '', $userUuid, true);
         $taskSaverResult = new TaskSaverResult($savedTask);
 
         $this

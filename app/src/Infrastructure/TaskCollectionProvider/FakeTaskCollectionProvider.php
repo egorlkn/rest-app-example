@@ -7,9 +7,7 @@ use App\Application\Component\TaskCollectionProvider\TaskCollectionProviderResul
 use App\Application\Domain\Task;
 use App\Application\Domain\TaskCollection;
 use App\Application\Domain\User;
-use Exception;
-use InvalidArgumentException;
-use Ramsey\Uuid\Exception\UnsatisfiedDependencyException;
+use Ramsey\Uuid\Exception\InvalidUuidStringException;
 use Ramsey\Uuid\Uuid;
 
 /**
@@ -20,34 +18,45 @@ class FakeTaskCollectionProvider implements TaskCollectionProvider
 {
     /**
      * @param User $user
+     * @param bool $includeDeleted
      * @return TaskCollectionProviderResult
-     * @throws InvalidArgumentException
-     * @throws Exception
+     * @throws InvalidUuidStringException
      */
-    public function getCollection(User $user): TaskCollectionProviderResult
+    public function getCollection(User $user, bool $includeDeleted = false): TaskCollectionProviderResult
     {
-        $taskCollection = $this->createTaskCollection($user);
+        $taskCollection = $this->createTaskCollection($user, $includeDeleted);
 
         return new TaskCollectionProviderResult($taskCollection);
     }
 
     /**
      * @param User $user
+     * @param bool $includeDeleted
      * @return TaskCollection
-     * @throws UnsatisfiedDependencyException
-     * @throws InvalidArgumentException
-     * @throws Exception
      */
-    private function createTaskCollection(User $user): TaskCollection
+    private function createTaskCollection(User $user, bool $includeDeleted): TaskCollection
     {
         $userId = $user->getId();
 
-        return new TaskCollection(
+        $collection = new TaskCollection(
             [
                 new Task(Uuid::fromString('8e80aeaa-ae5b-4970-a54d-c5a29cc59a0e'), 'Task one', $userId),
                 new Task(Uuid::fromString('e014b55e-8769-4a73-b7ea-81541abd7713'), 'Task two', $userId),
                 new Task(Uuid::fromString('2af76c6a-a613-4f74-827d-f8e735f2e1ce'), 'Task three', $userId),
             ]
         );
+
+        if (!$includeDeleted) {
+            return $collection;
+        }
+
+        $collection->append(
+            new Task(Uuid::fromString('8a5c1bf0-f911-4880-ab76-2a14e75066cc'), 'Task four', $userId, true)
+        );
+        $collection->append(
+            new Task(Uuid::fromString('e908dba1-fb8e-4509-b1fc-8e6f96b48819'), 'Task five', $userId, true)
+        );
+
+        return $collection;
     }
 }

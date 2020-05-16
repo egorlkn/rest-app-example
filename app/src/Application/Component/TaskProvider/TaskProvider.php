@@ -14,7 +14,8 @@ interface TaskProvider
     /**
      * @param UuidInterface $taskId
      * @param User $user
+     * @param bool $includeDeleted
      * @return TaskProviderResult
      */
-    public function getTask(UuidInterface $taskId, User $user): TaskProviderResult;
+    public function getTask(UuidInterface $taskId, User $user, bool $includeDeleted = false): TaskProviderResult;
 }
