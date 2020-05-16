@@ -25,10 +25,15 @@ class RenameTaskTest extends WebTestCase
         $this->assertJson($content);
     }
 
-    public function testRenameTaskWithNotFoundResponse(): void
+    /**
+     * @dataProvider notFoundUuidExamples
+     *
+     * @param string $taskUuid
+     */
+    public function testRenameTaskWithNotFoundResponse(string $taskUuid): void
     {
         $client = static::createClient();
-        $client->request('PUT', '/api/1/task/123/rename', ['name' => 'Upd task one']);
+        $client->request('PUT', sprintf('/api/1/task/%s/rename', $taskUuid), ['name' => 'Upd task one']);
 
         $response = $client->getResponse();
         $this->assertFalse($response->isSuccessful());
@@ -37,5 +42,16 @@ class RenameTaskTest extends WebTestCase
         $content = $response->getContent();
         $this->assertNotEmpty($content);
         $this->assertJsonStringEqualsJsonString('"Task is not found"', $content);
+    }
+
+    /**
+     * @return array<array>
+     */
+    public function notFoundUuidExamples(): array
+    {
+        return [
+            'invalid uuid' => ['123'],
+            'non-existent uuid' => ['a231a630-2cbf-4e38-a8e7-618c928317f3'],
+        ];
     }
 }
