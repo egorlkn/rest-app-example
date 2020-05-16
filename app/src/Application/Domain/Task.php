@@ -13,7 +13,7 @@ class Task
     /**
      * @var UuidInterface
      */
-    private UuidInterface $id;
+    private UuidInterface $uuid;
 
     /**
      * @var string
@@ -23,7 +23,7 @@ class Task
     /**
      * @var UuidInterface
      */
-    private UuidInterface $userId;
+    private UuidInterface $userUuid;
 
     /**
      * @var bool
@@ -32,25 +32,25 @@ class Task
 
     /**
      * Task constructor.
-     * @param UuidInterface $id
+     * @param UuidInterface $uuid
      * @param string $name
-     * @param UuidInterface $userId
+     * @param UuidInterface $userUuid
      * @param bool $deleted
      */
-    public function __construct(UuidInterface $id, string $name, UuidInterface $userId, bool $deleted = false)
+    public function __construct(UuidInterface $uuid, string $name, UuidInterface $userUuid, bool $deleted = false)
     {
-        $this->id = $id;
+        $this->uuid = $uuid;
         $this->name = $name;
-        $this->userId = $userId;
+        $this->userUuid = $userUuid;
         $this->deleted = $deleted;
     }
 
     /**
      * @return UuidInterface
      */
-    public function getId(): UuidInterface
+    public function getUuid(): UuidInterface
     {
-        return $this->id;
+        return $this->uuid;
     }
 
     /**
@@ -64,9 +64,9 @@ class Task
     /**
      * @return UuidInterface
      */
-    public function getUserId(): UuidInterface
+    public function getUserUuid(): UuidInterface
     {
-        return $this->userId;
+        return $this->userUuid;
     }
 
     /**
@@ -80,7 +80,7 @@ class Task
     public function toArray(): array
     {
         return [
-            'id' => $this->id->toString(),
+            'uuid' => $this->uuid->toString(),
             'name' => $this->name,
         ];
     }

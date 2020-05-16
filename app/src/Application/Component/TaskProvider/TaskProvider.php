@@ -12,10 +12,10 @@ use Ramsey\Uuid\UuidInterface;
 interface TaskProvider
 {
     /**
-     * @param UuidInterface $taskId
+     * @param UuidInterface $taskUuid
      * @param User $user
      * @param bool $includeDeleted
      * @return TaskProviderResult
      */
-    public function getTask(UuidInterface $taskId, User $user, bool $includeDeleted = false): TaskProviderResult;
+    public function getTask(UuidInterface $taskUuid, User $user, bool $includeDeleted = false): TaskProviderResult;
 }

@@ -37,14 +37,14 @@ class RenameTask extends AbstractController
      */
     public function renameTask(Request $request): JsonResponse
     {
-        $taskId = (string)$request->get('uuid');
+        $taskUuid = (string)$request->get('uuid');
         $newTaskName = (string)$request->get('name');
 
-        if (!Uuid::isValid($taskId)) {
+        if (!Uuid::isValid($taskUuid)) {
             return $this->create404Response();
         }
 
-        $renameTaskResult = $this->useCase->renameTask(Uuid::fromString($taskId), $newTaskName);
+        $renameTaskResult = $this->useCase->renameTask(Uuid::fromString($taskUuid), $newTaskName);
 
         if ($renameTaskResult->isSuccessful()) {
             return new JsonResponse($renameTaskResult->getTask()->toArray());

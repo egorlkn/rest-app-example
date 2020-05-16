@@ -11,9 +11,9 @@ use Ramsey\Uuid\UuidInterface;
 interface RenameTask
 {
     /**
-     * @param UuidInterface $taskId
+     * @param UuidInterface $taskUuid
      * @param string $newTaskName
      * @return RenameTaskResult
      */
-    public function renameTask(UuidInterface $taskId, string $newTaskName): RenameTaskResult;
+    public function renameTask(UuidInterface $taskUuid, string $newTaskName): RenameTaskResult;
 }

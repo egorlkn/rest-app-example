@@ -13,22 +13,22 @@ class User
     /**
      * @var UuidInterface
      */
-    private UuidInterface $id;
+    private UuidInterface $uuid;
 
     /**
      * User constructor.
-     * @param UuidInterface $id
+     * @param UuidInterface $uuid
      */
-    public function __construct(UuidInterface $id)
+    public function __construct(UuidInterface $uuid)
     {
-        $this->id = $id;
+        $this->uuid = $uuid;
     }
 
     /**
      * @return UuidInterface
      */
-    public function getId(): UuidInterface
+    public function getUuid(): UuidInterface
     {
-        return $this->id;
+        return $this->uuid;
     }
 }

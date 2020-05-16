@@ -18,14 +18,14 @@ class TaskTest extends TestCase
      */
     public function testToArray(): void
     {
-        $id = Uuid::uuid4();
+        $uuid = Uuid::uuid4();
         $name = 'Name';
 
-        $task = new Task($id, $name, Uuid::uuid4());
+        $task = new Task($uuid, $name, Uuid::uuid4());
 
         $this->assertSame(
             [
-                'id' => $id->toString(),
+                'uuid' => $uuid->toString(),
                 'name' => $name,
             ],
             $task->toArray()

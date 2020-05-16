@@ -75,9 +75,9 @@ class InteractorTest extends TestCase
         $this->assertTrue($renameTaskResult->isSuccessful());
 
         $renamedTask = $renameTaskResult->getTask();
-        $this->assertSame($taskUuid, $renamedTask->getId());
+        $this->assertSame($taskUuid, $renamedTask->getUuid());
         $this->assertSame($newTaskName, $renamedTask->getName());
-        $this->assertSame($userUuid, $renamedTask->getUserId());
+        $this->assertSame($userUuid, $renamedTask->getUserUuid());
         $this->assertFalse($renamedTask->isDeleted());
     }
 

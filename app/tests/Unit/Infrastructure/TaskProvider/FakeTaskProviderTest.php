@@ -44,9 +44,9 @@ class FakeTaskProviderTest extends TestCase
         $this->assertTrue($getTaskResult->isSuccessful());
 
         $task = $getTaskResult->getTask();
-        $this->assertSame($task->getId(), $taskUuid);
+        $this->assertSame($task->getUuid(), $taskUuid);
         $this->assertSame($task->getName(), $taskName);
-        $this->assertSame($task->getUserId(), $user->getId());
+        $this->assertSame($task->getUserUuid(), $user->getUuid());
         $this->assertSame($task->isDeleted(), $deleted);
     }
 

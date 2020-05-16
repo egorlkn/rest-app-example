@@ -46,16 +46,16 @@ class Interactor implements RenameTask
     }
 
     /**
-     * @param UuidInterface $taskId
+     * @param UuidInterface $taskUuid
      * @param string $newTaskName
      * @return RenameTaskResult
      */
-    public function renameTask(UuidInterface $taskId, string $newTaskName): RenameTaskResult
+    public function renameTask(UuidInterface $taskUuid, string $newTaskName): RenameTaskResult
     {
         $getUserResult = $this->currentUserProvider->getCurrentUser();
         $user = $getUserResult->getUser();
 
-        $getOldTaskResult = $this->taskProvider->getTask($taskId, $user);
+        $getOldTaskResult = $this->taskProvider->getTask($taskUuid, $user);
 
         if (!$getOldTaskResult->isSuccessful()) {
             return RenameTaskResult::createFailedResult();
@@ -63,7 +63,7 @@ class Interactor implements RenameTask
 
         $oldTask = $getOldTaskResult->getTask();
 
-        $renamedTask = new Task($oldTask->getId(), $newTaskName, $oldTask->getUserId());
+        $renamedTask = new Task($oldTask->getUuid(), $newTaskName, $oldTask->getUserUuid());
 
         $saveTaskResult = $this->taskSaver->saveTask($renamedTask);
         $savedTask = $saveTaskResult->getTask();

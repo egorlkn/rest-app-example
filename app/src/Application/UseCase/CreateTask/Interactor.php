@@ -45,7 +45,7 @@ class Interactor implements CreateTask
         $getUserResult = $this->currentUserProvider->getCurrentUser();
         $user = $getUserResult->getUser();
 
-        $task = new Task(Uuid::uuid4(), $taskName, $user->getId());
+        $task = new Task(Uuid::uuid4(), $taskName, $user->getUuid());
 
         $saveTaskResult = $this->taskSaver->saveTask($task);
         $savedTask = $saveTaskResult->getTask();
