@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace App\Tests\Unit\Application\UseCase\DeleteTask;
+namespace App\Tests\Unit\Application\UseCase\MarkTaskAsDeleted;
 
 use App\Application\Component\TaskProvider\TaskProvider;
 use App\Application\Component\TaskProvider\TaskProviderResult;
@@ -10,8 +10,9 @@ use App\Application\Component\UserProvider\CurrentUserProvider;
 use App\Application\Component\UserProvider\CurrentUserProviderResult;
 use App\Application\Domain\Task;
 use App\Application\Domain\User;
-use App\Application\UseCase\DeleteTask\Interactor;
+use App\Application\UseCase\MarkTaskAsDeleted\Interactor;
 use Exception;
+use LogicException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
@@ -19,7 +20,7 @@ use Ramsey\Uuid\UuidInterface;
 
 /**
  * Class InteractorTest
- * @package App\Tests\Unit\Application\UseCase\DeleteTask
+ * @package App\Tests\Unit\Application\UseCase\MarkTaskAsDeleted
  */
 class InteractorTest extends TestCase
 {
@@ -36,7 +37,7 @@ class InteractorTest extends TestCase
     /**
      * @var TaskSaver|MockObject
      */
-    private TaskSaver $taskSaver;
+    private $taskSaver;
 
     /**
      * @var Interactor
@@ -59,7 +60,7 @@ class InteractorTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testDeleteTaskWithSuccessfulResult(): void
+    public function testMarkTaskAsDeletedWithSuccessfulResult(): void
     {
         $userUuid = Uuid::uuid4();
         $this->setupUserProvider($userUuid);
@@ -67,25 +68,32 @@ class InteractorTest extends TestCase
         $taskUuid = Uuid::uuid4();
         $this->setupTaskProviderWithSuccessfulResult($taskUuid);
 
-        $this->setupTaskSaver($taskUuid, $userUuid, true);
+        $this->setupTaskSaver($taskUuid, $userUuid);
 
-        $deleteTaskResult = $this->interactor->deleteTask($taskUuid);
+        $markTaskResult = $this->interactor->markTaskAsDeleted($taskUuid);
+        $this->assertTrue($markTaskResult->isSuccessful());
 
-        $this->assertTrue($deleteTaskResult->isSuccessful());
+        $markedTask = $markTaskResult->getTask();
+        $this->assertSame($taskUuid, $markedTask->getUuid());
+        $this->assertSame($userUuid, $markedTask->getUserUuid());
+        $this->assertTrue($markedTask->isDeleted());
     }
 
     /**
      * @throws Exception
      */
-    public function testDeleteTaskWithFailedResult(): void
+    public function testMarkTaskAsDeletedWithFailedResult(): void
     {
         $this->setupUserProvider(Uuid::uuid4());
 
         $this->setupTaskProviderWithFailedResult();
 
-        $deleteTaskResult = $this->interactor->deleteTask(Uuid::uuid4());
+        $markTaskResult = $this->interactor->markTaskAsDeleted(Uuid::uuid4());
+        $this->assertFalse($markTaskResult->isSuccessful());
 
-        $this->assertFalse($deleteTaskResult->isSuccessful());
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('Can not get Task from failed result');
+        $markTaskResult->getTask();
     }
 
     /**
@@ -110,7 +118,7 @@ class InteractorTest extends TestCase
      */
     private function setupTaskProviderWithSuccessfulResult(UuidInterface $uuid): void
     {
-        $task = new Task($uuid, 'Task name', Uuid::uuid4());
+        $task = new Task($uuid, '', Uuid::uuid4());
 
         $getTaskResult = TaskProviderResult::createSuccessfulResult($task);
 
@@ -133,11 +141,10 @@ class InteractorTest extends TestCase
     /**
      * @param UuidInterface $taskUuid
      * @param UuidInterface $userUuid
-     * @param bool $completedTask
      */
-    private function setupTaskSaver(UuidInterface $taskUuid, UuidInterface $userUuid, bool $completedTask): void
+    private function setupTaskSaver(UuidInterface $taskUuid, UuidInterface $userUuid): void
     {
-        $savedTask = new Task($taskUuid, '', $userUuid, $completedTask, true);
+        $savedTask = new Task($taskUuid, '', $userUuid, true, true);
         $taskSaverResult = new TaskSaverResult($savedTask);
 
         $this

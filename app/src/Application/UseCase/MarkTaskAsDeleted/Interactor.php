@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace App\Application\UseCase\DeleteTask;
+namespace App\Application\UseCase\MarkTaskAsDeleted;
 
 use App\Application\Component\TaskProvider\TaskProvider;
 use App\Application\Component\TaskSaver\TaskSaver;
@@ -10,9 +10,9 @@ use Ramsey\Uuid\UuidInterface;
 
 /**
  * Class Interactor
- * @package App\Application\UseCase\DeleteTask
+ * @package App\Application\UseCase\MarkTaskAsDeleted
  */
-class Interactor implements DeleteTask
+class Interactor implements MarkTaskAsDeleted
 {
     /**
      * @var CurrentUserProvider
@@ -47,9 +47,9 @@ class Interactor implements DeleteTask
 
     /**
      * @param UuidInterface $taskUuid
-     * @return DeleteTaskResult
+     * @return MarkTaskAsDeletedResult
      */
-    public function deleteTask(UuidInterface $taskUuid): DeleteTaskResult
+    public function markTaskAsDeleted(UuidInterface $taskUuid): MarkTaskAsDeletedResult
     {
         $getUserResult = $this->currentUserProvider->getCurrentUser();
         $user = $getUserResult->getUser();
@@ -57,15 +57,22 @@ class Interactor implements DeleteTask
         $getTaskResult = $this->taskProvider->getTask($taskUuid, $user);
 
         if (!$getTaskResult->isSuccessful()) {
-            return DeleteTaskResult::createNotFoundResult();
+            return MarkTaskAsDeletedResult::createFailedResult();
         }
 
-        $task = $getTaskResult->getTask();
+        $oldTask = $getTaskResult->getTask();
 
-        $deletedTask = new Task($task->getUuid(), $task->getName(), $task->getUserUuid(), $task->isCompleted(), true);
+        $markedTask = new Task(
+            $oldTask->getUuid(),
+            $oldTask->getName(),
+            $oldTask->getUserUuid(),
+            $oldTask->isCompleted(),
+            true
+        );
 
-        $this->taskSaver->saveTask($deletedTask);
+        $saveTaskResult =$this->taskSaver->saveTask($markedTask);
+        $savedTask = $saveTaskResult->getTask();
 
-        return DeleteTaskResult::createSuccessfulResult();
+        return MarkTaskAsDeletedResult::createSuccessfulResult($savedTask);
     }
 }

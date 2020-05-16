@@ -5,16 +5,16 @@ namespace App\Tests\Integration\Entry\Api;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
- * Class DeleteTaskTest
+ * Class MarkTaskAsDeletedTest
  * @package App\Tests\Integration\Entry\Api
  * @coversNothing
  */
-class DeleteTaskTest extends WebTestCase
+class MarkTaskAsDeletedTest extends WebTestCase
 {
-    public function testDeleteTaskWith200Response(): void
+    public function testMarkTaskAsDeletedWithSuccessfulResponse(): void
     {
         $client = static::createClient();
-        $client->request('DELETE', '/api/1/task/94164a7f-ce76-45f4-bb6a-a27932836ce9/delete');
+        $client->request('PUT', '/api/1/task/94164a7f-ce76-45f4-bb6a-a27932836ce9/delete');
 
         $response = $client->getResponse();
         $this->assertTrue($response->isSuccessful());
@@ -22,7 +22,7 @@ class DeleteTaskTest extends WebTestCase
 
         $content = $response->getContent();
         $this->assertNotEmpty($content);
-        $this->assertJsonStringEqualsJsonString('"Task was deleted"', $content);
+        $this->assertJson($content);
     }
 
     /**
@@ -30,10 +30,10 @@ class DeleteTaskTest extends WebTestCase
      *
      * @param string $taskUuid
      */
-    public function testDeleteTaskWith404Response(string $taskUuid): void
+    public function testMarkTaskAsDeletedWithNotFoundResponse(string $taskUuid): void
     {
         $client = static::createClient();
-        $client->request('DELETE', sprintf('/api/1/task/%s/delete', $taskUuid));
+        $client->request('PUT', sprintf('/api/1/task/%s/delete', $taskUuid));
 
         $response = $client->getResponse();
         $this->assertFalse($response->isSuccessful());
