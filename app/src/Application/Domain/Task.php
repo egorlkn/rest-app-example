@@ -28,6 +28,11 @@ class Task
     /**
      * @var bool
      */
+    private bool $completed;
+
+    /**
+     * @var bool
+     */
     private bool $deleted;
 
     /**
@@ -35,13 +40,20 @@ class Task
      * @param UuidInterface $uuid
      * @param string $name
      * @param UuidInterface $userUuid
+     * @param bool $completed
      * @param bool $deleted
      */
-    public function __construct(UuidInterface $uuid, string $name, UuidInterface $userUuid, bool $deleted = false)
-    {
+    public function __construct(
+        UuidInterface $uuid,
+        string $name,
+        UuidInterface $userUuid,
+        bool $completed = false,
+        bool $deleted = false
+    ) {
         $this->uuid = $uuid;
         $this->name = $name;
         $this->userUuid = $userUuid;
+        $this->completed = $completed;
         $this->deleted = $deleted;
     }
 
@@ -72,6 +84,14 @@ class Task
     /**
      * @return bool
      */
+    public function isCompleted(): bool
+    {
+        return $this->completed;
+    }
+
+    /**
+     * @return bool
+     */
     public function isDeleted(): bool
     {
         return $this->deleted;
@@ -82,6 +102,7 @@ class Task
         return [
             'uuid' => $this->uuid->toString(),
             'name' => $this->name,
+            'completed' => $this->completed,
         ];
     }
 }

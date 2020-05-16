@@ -27,7 +27,9 @@ class FakeTaskProvider implements TaskProvider
         }
 
         if ($includeDeleted && $taskUuid->toString() === 'f5fa3e5f-cf2e-42a9-a2db-370dcb5384c6') {
-            return TaskProviderResult::createSuccessfulResult(new Task($taskUuid, 'Task two', $user->getUuid(), true));
+            return TaskProviderResult::createSuccessfulResult(
+                new Task($taskUuid, 'Task two', $user->getUuid(), false, true)
+            );
         }
 
         return TaskProviderResult::createFailedResult();

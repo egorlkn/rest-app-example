@@ -69,7 +69,8 @@ class InteractorTest extends TestCase
         $this->setupTaskProviderWithSuccessfulResult($taskUuid, $userUuid);
 
         $newTaskName = 'New task one';
-        $this->setupTaskSaver($taskUuid, $newTaskName, $userUuid);
+        $completedTask = true;
+        $this->setupTaskSaver($taskUuid, $newTaskName, $userUuid, $completedTask);
 
         $renameTaskResult = $this->interactor->renameTask($taskUuid, $newTaskName);
         $this->assertTrue($renameTaskResult->isSuccessful());
@@ -78,6 +79,7 @@ class InteractorTest extends TestCase
         $this->assertSame($taskUuid, $renamedTask->getUuid());
         $this->assertSame($newTaskName, $renamedTask->getName());
         $this->assertSame($userUuid, $renamedTask->getUserUuid());
+        $this->assertSame($completedTask, $renamedTask->isCompleted());
         $this->assertFalse($renamedTask->isDeleted());
     }
 
@@ -144,10 +146,15 @@ class InteractorTest extends TestCase
      * @param UuidInterface $taskUuid
      * @param string $taskName
      * @param UuidInterface $userUuid
+     * @param bool $completedTask
      */
-    private function setupTaskSaver(UuidInterface $taskUuid, string $taskName, UuidInterface $userUuid): void
-    {
-        $savedTask = new Task($taskUuid, $taskName, $userUuid);
+    private function setupTaskSaver(
+        UuidInterface $taskUuid,
+        string $taskName,
+        UuidInterface $userUuid,
+        bool $completedTask
+    ): void {
+        $savedTask = new Task($taskUuid, $taskName, $userUuid, $completedTask);
         $taskSaverResult = new TaskSaverResult($savedTask);
 
         $this

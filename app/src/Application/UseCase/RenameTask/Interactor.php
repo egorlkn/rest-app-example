@@ -63,7 +63,7 @@ class Interactor implements RenameTask
 
         $oldTask = $getOldTaskResult->getTask();
 
-        $renamedTask = new Task($oldTask->getUuid(), $newTaskName, $oldTask->getUserUuid());
+        $renamedTask = new Task($oldTask->getUuid(), $newTaskName, $oldTask->getUserUuid(), $oldTask->isCompleted());
 
         $saveTaskResult = $this->taskSaver->saveTask($renamedTask);
         $savedTask = $saveTaskResult->getTask();

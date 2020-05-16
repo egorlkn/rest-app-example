@@ -61,6 +61,7 @@ class InteractorTest extends TestCase
         $this->assertTrue(Uuid::isValid($task->getUuid()));
         $this->assertSame($taskName, $task->getName());
         $this->assertSame($userUuid, $task->getUserUuid());
+        $this->assertFalse($task->isCompleted());
         $this->assertFalse($task->isDeleted());
     }
 

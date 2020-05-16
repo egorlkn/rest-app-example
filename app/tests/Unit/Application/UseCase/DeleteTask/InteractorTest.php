@@ -67,7 +67,7 @@ class InteractorTest extends TestCase
         $taskUuid = Uuid::uuid4();
         $this->setupTaskProviderWithSuccessfulResult($taskUuid);
 
-        $this->setupTaskSaver($taskUuid, $userUuid);
+        $this->setupTaskSaver($taskUuid, $userUuid, true);
 
         $deleteTaskResult = $this->interactor->deleteTask($taskUuid);
 
@@ -133,10 +133,11 @@ class InteractorTest extends TestCase
     /**
      * @param UuidInterface $taskUuid
      * @param UuidInterface $userUuid
+     * @param bool $completedTask
      */
-    private function setupTaskSaver(UuidInterface $taskUuid, UuidInterface $userUuid): void
+    private function setupTaskSaver(UuidInterface $taskUuid, UuidInterface $userUuid, bool $completedTask): void
     {
-        $savedTask = new Task($taskUuid, '', $userUuid, true);
+        $savedTask = new Task($taskUuid, '', $userUuid, $completedTask, true);
         $taskSaverResult = new TaskSaverResult($savedTask);
 
         $this

@@ -20,13 +20,15 @@ class TaskTest extends TestCase
     {
         $uuid = Uuid::uuid4();
         $name = 'Name';
+        $completed = true;
 
-        $task = new Task($uuid, $name, Uuid::uuid4());
+        $task = new Task($uuid, $name, Uuid::uuid4(), $completed);
 
         $this->assertSame(
             [
                 'uuid' => $uuid->toString(),
                 'name' => $name,
+                'completed' => $completed,
             ],
             $task->toArray()
         );

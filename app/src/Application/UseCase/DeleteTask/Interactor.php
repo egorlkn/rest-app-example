@@ -62,7 +62,7 @@ class Interactor implements DeleteTask
 
         $task = $getTaskResult->getTask();
 
-        $deletedTask = new Task($task->getUuid(), $task->getName(), $task->getUserUuid(), true);
+        $deletedTask = new Task($task->getUuid(), $task->getName(), $task->getUserUuid(), $task->isCompleted(), true);
 
         $this->taskSaver->saveTask($deletedTask);
 
