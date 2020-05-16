@@ -5,16 +5,16 @@ namespace App\Tests\Integration\Entry\Api;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
- * Class UpdateTaskTest
+ * Class RenameTaskTest
  * @package App\Tests\Integration\Entry\Api
  * @coversNothing
  */
-class UpdateTaskTest extends WebTestCase
+class RenameTaskTest extends WebTestCase
 {
-    public function testUpdateTaskWithSuccessfulResponse(): void
+    public function testRenameTaskWithSuccessfulResponse(): void
     {
         $client = static::createClient();
-        $client->request('PUT', '/api/1/task/94164a7f-ce76-45f4-bb6a-a27932836ce9/update', ['name' => 'Upd task one']);
+        $client->request('PUT', '/api/1/task/94164a7f-ce76-45f4-bb6a-a27932836ce9/rename', ['name' => 'Upd task one']);
 
         $response = $client->getResponse();
         $this->assertTrue($response->isSuccessful());
@@ -25,10 +25,10 @@ class UpdateTaskTest extends WebTestCase
         $this->assertJson($content);
     }
 
-    public function testUpdateTaskWithNotFoundResponse(): void
+    public function testRenameTaskWithNotFoundResponse(): void
     {
         $client = static::createClient();
-        $client->request('PUT', '/api/1/task/123/update', ['name' => 'Upd task one']);
+        $client->request('PUT', '/api/1/task/123/rename', ['name' => 'Upd task one']);
 
         $response = $client->getResponse();
         $this->assertFalse($response->isSuccessful());

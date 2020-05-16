@@ -1,24 +1,21 @@
 <?php declare(strict_types=1);
 
-namespace App\Application\UseCase\UpdateTask;
+namespace App\Application\UseCase\RenameTask;
 
 use App\Application\Domain\Task;
 use LogicException;
 
 /**
- * Class UpdateTaskResult
- * @package App\Application\UseCase\UpdateTask
+ * Class RenameTaskResult
+ * @package App\Application\UseCase\RenameTask
  */
-class UpdateTaskResult
+class RenameTaskResult
 {
     /**
      * @var Task
      */
     private Task $task;
 
-    /**
-     * UpdateTaskResult constructor.
-     */
     private function __construct() {}
 
     /**

@@ -2,7 +2,7 @@
 
 namespace App\Entry\Api;
 
-use App\Application\UseCase\UpdateTask\UpdateTask as UpdateTaskUseCase;
+use App\Application\UseCase\RenameTask\RenameTask as RenameTaskUseCase;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -10,21 +10,21 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class CreateTask
+ * Class RenameTask
  * @package App\Entry\Api
  */
-class UpdateTask extends AbstractController
+class RenameTask extends AbstractController
 {
     /**
-     * @var UpdateTaskUseCase
+     * @var RenameTaskUseCase
      */
-    private UpdateTaskUseCase $useCase;
+    private RenameTaskUseCase $useCase;
 
     /**
-     * CreateTask constructor.
-     * @param UpdateTaskUseCase $useCase
+     * RenameTask constructor.
+     * @param RenameTaskUseCase $useCase
      */
-    public function __construct(UpdateTaskUseCase $useCase)
+    public function __construct(RenameTaskUseCase $useCase)
     {
         $this->useCase = $useCase;
     }
@@ -33,9 +33,9 @@ class UpdateTask extends AbstractController
      * @param Request $request
      * @return JsonResponse
      *
-     * @Route("/api/1/task/{uuid}/update", methods={"PUT"})
+     * @Route("/api/1/task/{uuid}/rename", methods={"PUT"})
      */
-    public function updateTask(Request $request): JsonResponse
+    public function renameTask(Request $request): JsonResponse
     {
         $taskId = (string)$request->get('uuid');
         $newTaskName = (string)$request->get('name');
@@ -44,10 +44,10 @@ class UpdateTask extends AbstractController
             return $this->create404Response();
         }
 
-        $updateTaskResult = $this->useCase->updateTask(Uuid::fromString($taskId), $newTaskName);
+        $renameTaskResult = $this->useCase->renameTask(Uuid::fromString($taskId), $newTaskName);
 
-        if ($updateTaskResult->isSuccessful()) {
-            return new JsonResponse($updateTaskResult->getTask()->toArray());
+        if ($renameTaskResult->isSuccessful()) {
+            return new JsonResponse($renameTaskResult->getTask()->toArray());
         }
 
         return $this->create404Response();

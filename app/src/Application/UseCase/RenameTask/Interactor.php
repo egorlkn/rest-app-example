@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace App\Application\UseCase\UpdateTask;
+namespace App\Application\UseCase\RenameTask;
 
 use App\Application\Component\TaskProvider\TaskProvider;
 use App\Application\Component\TaskSaver\TaskSaver;
@@ -10,9 +10,9 @@ use Ramsey\Uuid\UuidInterface;
 
 /**
  * Class Interactor
- * @package App\Application\UseCase\UpdateTask
+ * @package App\Application\UseCase\RenameTask
  */
-class Interactor implements UpdateTask
+class Interactor implements RenameTask
 {
     /**
      * @var CurrentUserProvider
@@ -48,9 +48,9 @@ class Interactor implements UpdateTask
     /**
      * @param UuidInterface $taskId
      * @param string $newTaskName
-     * @return UpdateTaskResult
+     * @return RenameTaskResult
      */
-    public function updateTask(UuidInterface $taskId, string $newTaskName): UpdateTaskResult
+    public function renameTask(UuidInterface $taskId, string $newTaskName): RenameTaskResult
     {
         $getUserResult = $this->currentUserProvider->getCurrentUser();
         $user = $getUserResult->getUser();
@@ -58,16 +58,16 @@ class Interactor implements UpdateTask
         $getOldTaskResult = $this->taskProvider->getTask($taskId, $user);
 
         if (!$getOldTaskResult->isSuccessful()) {
-            return UpdateTaskResult::createFailedResult();
+            return RenameTaskResult::createFailedResult();
         }
 
         $oldTask = $getOldTaskResult->getTask();
 
-        $updatedTask = new Task($oldTask->getId(), $newTaskName, $oldTask->getUserId());
+        $renamedTask = new Task($oldTask->getId(), $newTaskName, $oldTask->getUserId());
 
-        $saveTaskResult = $this->taskSaver->saveTask($updatedTask);
+        $saveTaskResult = $this->taskSaver->saveTask($renamedTask);
         $savedTask = $saveTaskResult->getTask();
 
-        return UpdateTaskResult::createSuccessfulResult($savedTask);
+        return RenameTaskResult::createSuccessfulResult($savedTask);
     }
 }

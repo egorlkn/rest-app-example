@@ -16,9 +16,6 @@ class TaskProviderResult
      */
     private Task $task;
 
-    /**
-     * UpdateTaskResult constructor.
-     */
     private function __construct() {}
 
     /**

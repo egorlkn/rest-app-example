@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace App\Tests\Unit\Application\UseCase\UpdateTask;
+namespace App\Tests\Unit\Application\UseCase\RenameTask;
 
 use App\Application\Component\TaskProvider\TaskProvider;
 use App\Application\Component\TaskProvider\TaskProviderResult;
@@ -10,7 +10,7 @@ use App\Application\Component\UserProvider\CurrentUserProvider;
 use App\Application\Component\UserProvider\CurrentUserProviderResult;
 use App\Application\Domain\Task;
 use App\Application\Domain\User;
-use App\Application\UseCase\UpdateTask\Interactor;
+use App\Application\UseCase\RenameTask\Interactor;
 use Exception;
 use LogicException;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -20,7 +20,7 @@ use Ramsey\Uuid\UuidInterface;
 
 /**
  * Class InteractorTest
- * @package App\Tests\Unit\Application\UseCase\UpdateTask
+ * @package App\Tests\Unit\Application\UseCase\RenameTask
  */
 class InteractorTest extends TestCase
 {
@@ -60,7 +60,7 @@ class InteractorTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testUpdateTask(): void
+    public function testRenameTaskWithSuccessfulResult(): void
     {
         $userUuid = Uuid::uuid4();
         $this->setupUserProvider($userUuid);
@@ -71,31 +71,31 @@ class InteractorTest extends TestCase
         $newTaskName = 'New task one';
         $this->setupTaskSaver($taskUuid, $newTaskName, $userUuid);
 
-        $updateTaskResult = $this->interactor->updateTask($taskUuid, $newTaskName);
-        $this->assertTrue($updateTaskResult->isSuccessful());
+        $renameTaskResult = $this->interactor->renameTask($taskUuid, $newTaskName);
+        $this->assertTrue($renameTaskResult->isSuccessful());
 
-        $updatedTask = $updateTaskResult->getTask();
-        $this->assertSame($taskUuid, $updatedTask->getId());
-        $this->assertSame($newTaskName, $updatedTask->getName());
-        $this->assertSame($userUuid, $updatedTask->getUserId());
-        $this->assertFalse($updatedTask->isDeleted());
+        $renamedTask = $renameTaskResult->getTask();
+        $this->assertSame($taskUuid, $renamedTask->getId());
+        $this->assertSame($newTaskName, $renamedTask->getName());
+        $this->assertSame($userUuid, $renamedTask->getUserId());
+        $this->assertFalse($renamedTask->isDeleted());
     }
 
     /**
      * @throws Exception
      */
-    public function testFailedUpdateTask(): void
+    public function testRenameTaskWithFailedResult(): void
     {
         $this->setupUserProvider(Uuid::uuid4());
 
         $this->setupTaskProviderWithFailedResult();
 
-        $updateTaskResult = $this->interactor->updateTask(Uuid::uuid4(), 'New task one');
-        $this->assertFalse($updateTaskResult->isSuccessful());
+        $renameTaskResult = $this->interactor->renameTask(Uuid::uuid4(), 'New task one');
+        $this->assertFalse($renameTaskResult->isSuccessful());
 
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Can not get Task from failed result');
-        $updateTaskResult->getTask();
+        $renameTaskResult->getTask();
     }
 
     /**

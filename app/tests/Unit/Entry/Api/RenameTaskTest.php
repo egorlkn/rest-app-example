@@ -3,9 +3,9 @@
 namespace App\Tests\Unit\Entry\Api;
 
 use App\Application\Domain\Task;
-use App\Application\UseCase\UpdateTask\UpdateTask as UpdateTaskUseCase;
-use App\Application\UseCase\UpdateTask\UpdateTaskResult;
-use App\Entry\Api\UpdateTask as UpdateTaskHandler;
+use App\Application\UseCase\RenameTask\RenameTask as RenameTaskUseCase;
+use App\Application\UseCase\RenameTask\RenameTaskResult;
+use App\Entry\Api\RenameTask as RenameTaskHandler;
 use Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -14,42 +14,42 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class UpdateTaskTest
+ * Class RenameTaskTest
  * @package App\Tests\Unit\Entry\Api
  */
-class UpdateTaskTest extends TestCase
+class RenameTaskTest extends TestCase
 {
     /**
-     * @var UpdateTaskUseCase|MockObject
+     * @var RenameTaskUseCase|MockObject
      */
     private $useCase;
 
     /**
-     * @var UpdateTaskHandler
+     * @var RenameTaskHandler
      */
-    private UpdateTaskHandler $handler;
+    private RenameTaskHandler $handler;
 
     protected function setUp(): void
     {
-        $this->useCase = $this->createMock(UpdateTaskUseCase::class);
+        $this->useCase = $this->createMock(RenameTaskUseCase::class);
 
-        $this->handler = new UpdateTaskHandler($this->useCase);
+        $this->handler = new RenameTaskHandler($this->useCase);
     }
 
     /**
      * @throws Exception
      */
-    public function testUpdateTaskWithSuccessfulResponse(): void
+    public function testRenameTaskWithSuccessfulResponse(): void
     {
         $taskUuid = '94164a7f-ce76-45f4-bb6a-a27932836ce9';
         $taskName = 'Task name';
         $task = new Task(Uuid::fromString($taskUuid), $taskName, Uuid::uuid4());
 
-        $useCaseResult = UpdateTaskResult::createSuccessfulResult($task);
+        $useCaseResult = RenameTaskResult::createSuccessfulResult($task);
         $this->setupUseCase($useCaseResult);
         $request = $this->createRequest($taskUuid, $taskName);
 
-        $response = $this->handler->updateTask($request);
+        $response = $this->handler->renameTask($request);
 
         $this->assertEquals(new JsonResponse($task->toArray()), $response);
     }
@@ -60,13 +60,13 @@ class UpdateTaskTest extends TestCase
      * @param string $taskUuid
      * @throws Exception
      */
-    public function testUpdateTaskWithNotFoundResponse(string $taskUuid): void
+    public function testRenameTaskWithNotFoundResponse(string $taskUuid): void
     {
-        $useCaseResult = UpdateTaskResult::createFailedResult();
+        $useCaseResult = RenameTaskResult::createFailedResult();
         $this->setupUseCase($useCaseResult);
         $request = $this->createRequest($taskUuid, 'Task name');
 
-        $response = $this->handler->updateTask($request);
+        $response = $this->handler->renameTask($request);
 
         $this->assertEquals(new JsonResponse('Task is not found', 404), $response);
     }
@@ -83,13 +83,13 @@ class UpdateTaskTest extends TestCase
     }
 
     /**
-     * @param UpdateTaskResult $expectedResult
+     * @param RenameTaskResult $expectedResult
      */
-    private function setupUseCase(UpdateTaskResult $expectedResult): void
+    private function setupUseCase(RenameTaskResult $expectedResult): void
     {
         $this
             ->useCase
-            ->method('updateTask')
+            ->method('renameTask')
             ->willReturn($expectedResult);
     }
 
