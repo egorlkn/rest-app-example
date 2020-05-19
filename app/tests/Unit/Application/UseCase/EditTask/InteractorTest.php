@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace App\Tests\Unit\Application\UseCase\MarkTaskAsDeleted;
+namespace App\Tests\Unit\Application\UseCase\EditTask;
 
 use App\Application\Component\TaskProvider\TaskProvider;
 use App\Application\Component\TaskProvider\TaskProviderResult;
@@ -10,7 +10,8 @@ use App\Application\Component\UserProvider\CurrentUserProvider;
 use App\Application\Component\UserProvider\CurrentUserProviderResult;
 use App\Application\Domain\Task;
 use App\Application\Domain\User;
-use App\Application\UseCase\MarkTaskAsDeleted\Interactor;
+use App\Application\UseCase\EditTask\EditTaskRequest;
+use App\Application\UseCase\EditTask\Interactor;
 use Exception;
 use LogicException;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -20,7 +21,7 @@ use Ramsey\Uuid\UuidInterface;
 
 /**
  * Class InteractorTest
- * @package App\Tests\Unit\Application\UseCase\MarkTaskAsDeleted
+ * @package App\Tests\Unit\Application\UseCase\EditTask
  */
 class InteractorTest extends TestCase
 {
@@ -60,7 +61,7 @@ class InteractorTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testMarkTaskAsDeletedWithSuccessfulResult(): void
+    public function testEditTaskWithSuccessfulResult(): void
     {
         $userUuid = Uuid::uuid4();
         $this->setupUserProvider($userUuid);
@@ -68,32 +69,39 @@ class InteractorTest extends TestCase
         $taskUuid = Uuid::uuid4();
         $this->setupTaskProviderWithSuccessfulResult($taskUuid, $userUuid);
 
-        $this->setupTaskSaver($taskUuid, $userUuid);
+        $taskNewName = 'Task new name';
+        $markedTaskAsCompleted = true;
+        $this->setupTaskSaver($taskUuid, $taskNewName, $markedTaskAsCompleted, $userUuid);
 
-        $markTaskResult = $this->interactor->markTaskAsDeleted($taskUuid);
-        $this->assertTrue($markTaskResult->isSuccessful());
+        $editTaskRequest = new EditTaskRequest($taskNewName, $markedTaskAsCompleted);
 
-        $markedTask = $markTaskResult->getTask();
-        $this->assertSame($taskUuid, $markedTask->getUuid());
-        $this->assertSame($userUuid, $markedTask->getUserUuid());
-        $this->assertTrue($markedTask->isDeleted());
+        $editTaskResult = $this->interactor->editTask($taskUuid, $editTaskRequest);
+        $this->assertTrue($editTaskResult->isSuccessful());
+
+        $editedTask = $editTaskResult->getTask();
+        $this->assertSame($taskUuid, $editedTask->getUuid());
+        $this->assertSame($taskNewName, $editedTask->getName());
+        $this->assertSame($userUuid, $editedTask->getUserUuid());
+        $this->assertSame($markedTaskAsCompleted, $editedTask->isCompleted());
     }
 
     /**
      * @throws Exception
      */
-    public function testMarkTaskAsDeletedWithFailedResult(): void
+    public function testEditTaskWithFailedResult(): void
     {
         $this->setupUserProvider(Uuid::uuid4());
 
         $this->setupTaskProviderWithFailedResult();
 
-        $markTaskResult = $this->interactor->markTaskAsDeleted(Uuid::uuid4());
-        $this->assertFalse($markTaskResult->isSuccessful());
+        $editTaskRequest = new EditTaskRequest('Task new name', true);
+
+        $editTaskResult = $this->interactor->editTask(Uuid::uuid4(), $editTaskRequest);
+        $this->assertFalse($editTaskResult->isSuccessful());
 
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Can not get Task from failed result');
-        $markTaskResult->getTask();
+        $editTaskResult->getTask();
     }
 
     /**
@@ -113,12 +121,14 @@ class InteractorTest extends TestCase
     }
 
     /**
-     * @param UuidInterface $uuid
+     * @param UuidInterface $taskUuid
      * @param UuidInterface $userUuid
      */
-    private function setupTaskProviderWithSuccessfulResult(UuidInterface $uuid, UuidInterface $userUuid): void
-    {
-        $task = new Task($uuid, '', $userUuid);
+    private function setupTaskProviderWithSuccessfulResult(
+        UuidInterface $taskUuid,
+        UuidInterface $userUuid
+    ): void {
+        $task = new Task($taskUuid, 'Task old name', $userUuid);
 
         $getTaskResult = TaskProviderResult::createSuccessfulResult($task);
 
@@ -140,11 +150,17 @@ class InteractorTest extends TestCase
 
     /**
      * @param UuidInterface $taskUuid
+     * @param string $taskNewName
+     * @param bool $markedTaskAsCompleted
      * @param UuidInterface $userUuid
      */
-    private function setupTaskSaver(UuidInterface $taskUuid, UuidInterface $userUuid): void
-    {
-        $savedTask = new Task($taskUuid, '', $userUuid, true, true);
+    private function setupTaskSaver(
+        UuidInterface $taskUuid,
+        string $taskNewName,
+        bool $markedTaskAsCompleted,
+        UuidInterface $userUuid
+    ): void {
+        $savedTask = new Task($taskUuid, $taskNewName, $userUuid, $markedTaskAsCompleted);
         $taskSaverResult = new TaskSaverResult($savedTask);
 
         $this
