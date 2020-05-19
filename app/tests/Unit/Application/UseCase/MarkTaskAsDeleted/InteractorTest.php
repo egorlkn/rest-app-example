@@ -66,7 +66,7 @@ class InteractorTest extends TestCase
         $this->setupUserProvider($userUuid);
 
         $taskUuid = Uuid::uuid4();
-        $this->setupTaskProviderWithSuccessfulResult($taskUuid);
+        $this->setupTaskProviderWithSuccessfulResult($taskUuid, $userUuid);
 
         $this->setupTaskSaver($taskUuid, $userUuid);
 
@@ -114,11 +114,11 @@ class InteractorTest extends TestCase
 
     /**
      * @param UuidInterface $uuid
-     * @throws Exception
+     * @param UuidInterface $userUuid
      */
-    private function setupTaskProviderWithSuccessfulResult(UuidInterface $uuid): void
+    private function setupTaskProviderWithSuccessfulResult(UuidInterface $uuid, UuidInterface $userUuid): void
     {
-        $task = new Task($uuid, '', Uuid::uuid4());
+        $task = new Task($uuid, '', $userUuid);
 
         $getTaskResult = TaskProviderResult::createSuccessfulResult($task);
 
