@@ -1,23 +1,23 @@
 <?php declare(strict_types=1);
 
-namespace App\Tests\Unit\Entry\Api;
+namespace App\Tests\Unit\Entry\Api\ExistentTask;
 
 use App\Application\Domain\Task;
 use App\Application\UseCase\MarkTaskAsDeleted\MarkTaskAsDeleted as MarkTaskAsDeletedUseCase;
 use App\Application\UseCase\MarkTaskAsDeleted\MarkTaskAsDeletedResult;
-use App\Entry\Api\MarkTaskAsDeleted as MarkTaskAsDeletedHandler;
+use App\Entry\Api\ExistentTask\DeleteTask as DeleteTaskRequestHandler;
 use Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class MarkTaskAsDeletedTest
- * @package App\Tests\Unit\Entry\Api
+ * Class DeleteTaskTest
+ * @package App\Tests\Unit\Entry\Api\ExistentTask
  */
-class MarkTaskAsDeletedTest extends TestCase
+class DeleteTaskTest extends TestCase
 {
     /**
      * @var MarkTaskAsDeletedUseCase|MockObject
@@ -25,21 +25,21 @@ class MarkTaskAsDeletedTest extends TestCase
     private $useCase;
 
     /**
-     * @var MarkTaskAsDeletedHandler
+     * @var DeleteTaskRequestHandler
      */
-    private MarkTaskAsDeletedHandler $handler;
+    private DeleteTaskRequestHandler $handler;
 
     protected function setUp(): void
     {
         $this->useCase = $this->createMock(MarkTaskAsDeletedUseCase::class);
 
-        $this->handler = new MarkTaskAsDeletedHandler($this->useCase);
+        $this->handler = new DeleteTaskRequestHandler($this->useCase);
     }
 
     /**
      * @throws Exception
      */
-    public function testMarkTaskAsDeletedWithSuccessfulResponse(): void
+    public function testDeleteTaskWithSuccessfulResponse(): void
     {
         $taskUuid = Uuid::uuid4();
         $request = $this->createRequest($taskUuid->toString());
@@ -47,9 +47,9 @@ class MarkTaskAsDeletedTest extends TestCase
         $task = new Task($taskUuid, '', Uuid::uuid4(), true, true);
         $this->setupUseCase(MarkTaskAsDeletedResult::createSuccessfulResult($task));
 
-        $response = $this->handler->markTaskAsDeleted($request);
+        $response = $this->handler->deleteTask($request);
 
-        $this->assertEquals(new JsonResponse($task->toArray()), $response);
+        $this->assertEquals((new Response())->setStatusCode(Response::HTTP_NO_CONTENT), $response);
     }
 
     /**
@@ -57,15 +57,15 @@ class MarkTaskAsDeletedTest extends TestCase
      *
      * @param string $taskUuid
      */
-    public function testMarkTaskAsDeletedWithNotFoundResponse(string $taskUuid): void
+    public function testDeleteTaskWithNotFoundResponse(string $taskUuid): void
     {
         $request = $this->createRequest($taskUuid);
 
         $this->setupUseCase(MarkTaskAsDeletedResult::createFailedResult());
 
-        $response = $this->handler->markTaskAsDeleted($request);
+        $response = $this->handler->deleteTask($request);
 
-        $this->assertEquals(new JsonResponse('Task is not found', 404), $response);
+        $this->assertEquals((new Response())->setStatusCode(Response::HTTP_NOT_FOUND), $response);
     }
 
     /**
@@ -97,7 +97,7 @@ class MarkTaskAsDeletedTest extends TestCase
     private function createRequest(string $taskUuid): Request
     {
         $request = new Request();
-        $request->attributes->set('uuid', $taskUuid);
+        $request->query->set('uuid', $taskUuid);
 
         return $request;
     }

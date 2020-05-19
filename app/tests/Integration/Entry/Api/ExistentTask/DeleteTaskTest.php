@@ -1,28 +1,27 @@
 <?php declare(strict_types=1);
 
-namespace App\Tests\Integration\Entry\Api;
+namespace App\Tests\Integration\Entry\Api\ExistentTask;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
- * Class MarkTaskAsDeletedTest
- * @package App\Tests\Integration\Entry\Api
+ * Class DeleteTaskTest
+ * @package App\Tests\Integration\Entry\Api\ExistentTask
  * @coversNothing
  */
-class MarkTaskAsDeletedTest extends WebTestCase
+class DeleteTaskTest extends WebTestCase
 {
-    public function testMarkTaskAsDeletedWithSuccessfulResponse(): void
+    public function testDeleteTaskWithSuccessfulResponse(): void
     {
         $client = static::createClient();
-        $client->request('PUT', '/api/1/task/94164a7f-ce76-45f4-bb6a-a27932836ce9/delete');
+        $client->request('DELETE', '/api/1/task/94164a7f-ce76-45f4-bb6a-a27932836ce9');
 
         $response = $client->getResponse();
         $this->assertTrue($response->isSuccessful());
-        $this->assertSame($response->getStatusCode(), 200);
+        $this->assertSame($response->getStatusCode(), 204);
 
         $content = $response->getContent();
-        $this->assertNotEmpty($content);
-        $this->assertJson($content);
+        $this->assertEmpty($content);
     }
 
     /**
@@ -30,18 +29,17 @@ class MarkTaskAsDeletedTest extends WebTestCase
      *
      * @param string $taskUuid
      */
-    public function testMarkTaskAsDeletedWithNotFoundResponse(string $taskUuid): void
+    public function testDeleteTaskWithNotFoundResponse(string $taskUuid): void
     {
         $client = static::createClient();
-        $client->request('PUT', sprintf('/api/1/task/%s/delete', $taskUuid));
+        $client->request('DELETE', sprintf('/api/1/task/%s', $taskUuid));
 
         $response = $client->getResponse();
         $this->assertFalse($response->isSuccessful());
         $this->assertSame($response->getStatusCode(), 404);
 
         $content = $response->getContent();
-        $this->assertNotEmpty($content);
-        $this->assertJsonStringEqualsJsonString('"Task is not found"', $content);
+        $this->assertEmpty($content);
     }
 
     /**
