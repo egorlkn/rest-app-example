@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace App\Entry\Api;
+namespace App\Entry\Api\TaskList;
 
 use App\Application\UseCase\GetTaskCollection\GetTaskCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -9,7 +9,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class GetTaskList
- * @package App\Entry\Api
+ * @package App\Entry\Api\TaskList
+ *
+ * @Route(path="/tasks", name="task_list_")
  */
 class GetTaskList extends AbstractController
 {
@@ -30,7 +32,7 @@ class GetTaskList extends AbstractController
     /**
      * @return JsonResponse
      *
-     * @Route("/api/1/task/list", methods={"GET"})
+     * @Route(methods={"GET"}, name="get_task_list")
      */
     public function getTaskList(): JsonResponse
     {

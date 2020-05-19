@@ -1,3 +1,5 @@
-controllers:
+api_1:
     resource: ../../src/Entry/Api
     type: annotation
+    prefix: /api/1
+    name_prefix: api_1_
