@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace App\Application\UseCase\CreateTask;
+namespace App\Application\UseCase\AddNewTask;
 
 use App\Application\Component\TaskSaver\TaskSaver;
 use App\Application\Component\UserProvider\CurrentUserProvider;
@@ -10,9 +10,9 @@ use Ramsey\Uuid\Uuid;
 
 /**
  * Class Interactor
- * @package App\Application\UseCase\CreateTask
+ * @package App\Application\UseCase\AddNewTask
  */
-class Interactor implements CreateTask
+class Interactor implements AddNewTask
 {
     /**
      * @var CurrentUserProvider
@@ -36,20 +36,25 @@ class Interactor implements CreateTask
     }
 
     /**
-     * @param string $taskName
-     * @return CreateTaskResult
+     * @param AddNewTaskRequest $addNewTaskRequest
+     * @return AddNewTaskResult
      * @throws Exception
      */
-    public function createTask(string $taskName): CreateTaskResult
+    public function addNewTask(AddNewTaskRequest $addNewTaskRequest): AddNewTaskResult
     {
         $getUserResult = $this->currentUserProvider->getCurrentUser();
         $user = $getUserResult->getUser();
 
-        $task = new Task(Uuid::uuid4(), $taskName, $user->getUuid());
+        $task = new Task(
+            Uuid::uuid4(),
+            $addNewTaskRequest->getName(),
+            $user->getUuid(),
+            $addNewTaskRequest->isCompleted()
+        );
 
         $saveTaskResult = $this->taskSaver->saveTask($task);
         $savedTask = $saveTaskResult->getTask();
 
-        return new CreateTaskResult($savedTask);
+        return new AddNewTaskResult($savedTask);
     }
 }

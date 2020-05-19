@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace App\Tests\Unit\Application\UseCase\CreateTask;
+namespace App\Tests\Unit\Application\UseCase\AddNewTask;
 
 use App\Application\Component\TaskSaver\TaskSaver;
 use App\Application\Component\TaskSaver\TaskSaverResult;
@@ -8,7 +8,8 @@ use App\Application\Component\UserProvider\CurrentUserProvider;
 use App\Application\Component\UserProvider\CurrentUserProviderResult;
 use App\Application\Domain\Task;
 use App\Application\Domain\User;
-use App\Application\UseCase\CreateTask\Interactor;
+use App\Application\UseCase\AddNewTask\AddNewTaskRequest;
+use App\Application\UseCase\AddNewTask\Interactor;
 use Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -17,7 +18,7 @@ use Ramsey\Uuid\UuidInterface;
 
 /**
  * Class InteractorTest
- * @package App\Tests\Unit\Application\UseCase\CreateTask
+ * @package App\Tests\Unit\Application\UseCase\AddNewTask
  */
 class InteractorTest extends TestCase
 {
@@ -47,21 +48,22 @@ class InteractorTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testCreateTask(): void
+    public function testAddNewTask(): void
     {
         $userUuid = Uuid::uuid4();
         $this->setupUserProvider($userUuid);
 
         $taskName = 'Task one';
-        $this->setupTaskSaver($taskName, $userUuid);
+        $taskIsCompleted = false;
+        $this->setupTaskSaver($taskName, $taskIsCompleted, $userUuid);
 
-        $createTaskResult = $this->interactor->createTask($taskName);
-        $task = $createTaskResult->getTask();
+        $addNewTaskResult = $this->interactor->addNewTask(new AddNewTaskRequest($taskName, $taskIsCompleted));
+        $task = $addNewTaskResult->getTask();
 
         $this->assertTrue(Uuid::isValid($task->getUuid()));
         $this->assertSame($taskName, $task->getName());
         $this->assertSame($userUuid, $task->getUserUuid());
-        $this->assertFalse($task->isCompleted());
+        $this->assertSame($taskIsCompleted, $task->isCompleted());
         $this->assertFalse($task->isDeleted());
     }
 
@@ -82,12 +84,13 @@ class InteractorTest extends TestCase
 
     /**
      * @param string $taskName
+     * @param bool $taskIsCompleted
      * @param UuidInterface $userUuid
      * @throws Exception
      */
-    private function setupTaskSaver(string $taskName, UuidInterface $userUuid): void
+    private function setupTaskSaver(string $taskName, bool $taskIsCompleted, UuidInterface $userUuid): void
     {
-        $savedTask = new Task(Uuid::uuid4(), $taskName, $userUuid);
+        $savedTask = new Task(Uuid::uuid4(), $taskName, $userUuid, $taskIsCompleted);
         $taskSaverResult = new TaskSaverResult($savedTask);
 
         $this

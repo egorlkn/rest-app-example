@@ -1,14 +1,14 @@
 <?php declare(strict_types=1);
 
-namespace App\Application\UseCase\CreateTask;
+namespace App\Application\UseCase\AddNewTask;
 
 use App\Application\Domain\Task;
 
 /**
- * Class CreateTaskResult
- * @package App\Application\UseCase\CreateTask
+ * Class AddNewTaskResult
+ * @package App\Application\UseCase\AddNewTask
  */
-class CreateTaskResult
+class AddNewTaskResult
 {
     /**
      * @var Task
@@ -16,7 +16,7 @@ class CreateTaskResult
     private Task $task;
 
     /**
-     * CreateTaskResult constructor.
+     * AddNewTaskResult constructor.
      * @param Task $task
      */
     public function __construct(Task $task)
