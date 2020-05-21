@@ -6,10 +6,10 @@ use App\Application\Domain\Task;
 use LogicException;
 
 /**
- * Class EditTaskResponse
+ * Class Result
  * @package App\Application\UseCase\EditTask
  */
-class EditTaskResponse
+class Result
 {
     /**
      * @var Task

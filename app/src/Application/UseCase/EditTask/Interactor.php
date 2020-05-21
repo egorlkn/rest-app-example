@@ -6,7 +6,6 @@ use App\Application\Component\TaskProvider\TaskProvider;
 use App\Application\Component\TaskSaver\TaskSaver;
 use App\Application\Component\UserProvider\CurrentUserProvider;
 use App\Application\Domain\Task;
-use Ramsey\Uuid\UuidInterface;
 
 /**
  * Class Interactor
@@ -46,34 +45,33 @@ class Interactor implements EditTask
     }
 
     /**
-     * @param UuidInterface $taskUuid
-     * @param EditTaskRequest $request
-     * @return EditTaskResponse
+     * @param InputData $inputData
+     * @return Result
      */
-    public function editTask(UuidInterface $taskUuid, EditTaskRequest $request): EditTaskResponse
+    public function editTask(InputData $inputData): Result
     {
         $getUserResult = $this->currentUserProvider->getCurrentUser();
         $user = $getUserResult->getUser();
 
-        $getTaskResult = $this->taskProvider->getTask($taskUuid, $user);
+        $getTaskResult = $this->taskProvider->getTask($inputData->getTaskUuid(), $user);
 
         if (!$getTaskResult->isSuccessful()) {
-            return EditTaskResponse::createFailedResult();
+            return Result::createFailedResult();
         }
 
         $oldTask = $getTaskResult->getTask();
 
         $editedTask = new Task(
             $oldTask->getUuid(),
-            $request->getName(),
+            $inputData->getTaskName(),
             $oldTask->getUserUuid(),
-            $request->isCompleted(),
+            $inputData->isCompletedTask(),
             $oldTask->isDeleted()
         );
 
         $saveTaskResult =$this->taskSaver->saveTask($editedTask);
         $savedTask = $saveTaskResult->getTask();
 
-        return EditTaskResponse::createSuccessfulResult($savedTask);
+        return Result::createSuccessfulResult($savedTask);
     }
 }

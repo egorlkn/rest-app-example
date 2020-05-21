@@ -2,8 +2,6 @@
 
 namespace App\Application\UseCase\EditTask;
 
-use Ramsey\Uuid\UuidInterface;
-
 /**
  * Interface EditTask
  * @package App\Application\UseCase\EditTask
@@ -11,9 +9,8 @@ use Ramsey\Uuid\UuidInterface;
 interface EditTask
 {
     /**
-     * @param UuidInterface $taskUuid
-     * @param EditTaskRequest $request
-     * @return EditTaskResponse
+     * @param InputData $inputData
+     * @return Result
      */
-    public function editTask(UuidInterface $taskUuid, EditTaskRequest $request): EditTaskResponse;
+    public function editTask(InputData $inputData): Result;
 }

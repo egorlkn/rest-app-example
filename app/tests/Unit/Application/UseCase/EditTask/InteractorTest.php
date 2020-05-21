@@ -10,7 +10,7 @@ use App\Application\Component\UserProvider\CurrentUserProvider;
 use App\Application\Component\UserProvider\CurrentUserProviderResult;
 use App\Application\Domain\Task;
 use App\Application\Domain\User;
-use App\Application\UseCase\EditTask\EditTaskRequest;
+use App\Application\UseCase\EditTask\InputData;
 use App\Application\UseCase\EditTask\Interactor;
 use Exception;
 use LogicException;
@@ -70,19 +70,19 @@ class InteractorTest extends TestCase
         $this->setupTaskProviderWithSuccessfulResult($taskUuid, $userUuid);
 
         $taskNewName = 'Task new name';
-        $markedTaskAsCompleted = true;
-        $this->setupTaskSaver($taskUuid, $taskNewName, $markedTaskAsCompleted, $userUuid);
+        $isCompletedTask = true;
+        $this->setupTaskSaver($taskUuid, $taskNewName, $isCompletedTask, $userUuid);
 
-        $editTaskRequest = new EditTaskRequest($taskNewName, $markedTaskAsCompleted);
+        $inputData = $this->createInputData($taskUuid, $taskNewName, $isCompletedTask);
 
-        $editTaskResult = $this->interactor->editTask($taskUuid, $editTaskRequest);
+        $editTaskResult = $this->interactor->editTask($inputData);
         $this->assertTrue($editTaskResult->isSuccessful());
 
         $editedTask = $editTaskResult->getTask();
         $this->assertSame($taskUuid, $editedTask->getUuid());
         $this->assertSame($taskNewName, $editedTask->getName());
         $this->assertSame($userUuid, $editedTask->getUserUuid());
-        $this->assertSame($markedTaskAsCompleted, $editedTask->isCompleted());
+        $this->assertSame($isCompletedTask, $editedTask->isCompleted());
     }
 
     /**
@@ -94,9 +94,9 @@ class InteractorTest extends TestCase
 
         $this->setupTaskProviderWithFailedResult();
 
-        $editTaskRequest = new EditTaskRequest('Task new name', true);
+        $inputData = $this->createInputData(Uuid::uuid4());
 
-        $editTaskResult = $this->interactor->editTask(Uuid::uuid4(), $editTaskRequest);
+        $editTaskResult = $this->interactor->editTask($inputData);
         $this->assertFalse($editTaskResult->isSuccessful());
 
         $this->expectException(LogicException::class);
@@ -151,16 +151,16 @@ class InteractorTest extends TestCase
     /**
      * @param UuidInterface $taskUuid
      * @param string $taskNewName
-     * @param bool $markedTaskAsCompleted
+     * @param bool $isCompletedTask
      * @param UuidInterface $userUuid
      */
     private function setupTaskSaver(
         UuidInterface $taskUuid,
         string $taskNewName,
-        bool $markedTaskAsCompleted,
+        bool $isCompletedTask,
         UuidInterface $userUuid
     ): void {
-        $savedTask = new Task($taskUuid, $taskNewName, $userUuid, $markedTaskAsCompleted);
+        $savedTask = new Task($taskUuid, $taskNewName, $userUuid, $isCompletedTask);
         $taskSaverResult = new TaskSaverResult($savedTask);
 
         $this
@@ -168,5 +168,41 @@ class InteractorTest extends TestCase
             ->expects($this->once())
             ->method('saveTask')
             ->willReturn($taskSaverResult);
+    }
+
+    /**
+     * @param UuidInterface $taskUuid
+     * @param string|null $taskName
+     * @param bool|null $isCompletedTask
+     * @return InputData|MockObject
+     */
+    private function createInputData(
+        UuidInterface $taskUuid,
+        string $taskName = null,
+        bool $isCompletedTask = null
+    ): InputData {
+        /** @var InputData|MockObject $inputData */
+        $inputData = $this->createMock(InputData::class);
+
+        $inputData
+            ->expects($this->once())
+            ->method('getTaskUuid')
+            ->willReturn($taskUuid);
+
+        if (is_string($taskName)) {
+            $inputData
+                ->expects($this->once())
+                ->method('getTaskName')
+                ->willReturn($taskName);
+        }
+
+        if (is_bool($isCompletedTask)) {
+            $inputData
+                ->expects($this->once())
+                ->method('isCompletedTask')
+                ->willReturn($isCompletedTask);
+        }
+
+        return $inputData;
     }
 }
