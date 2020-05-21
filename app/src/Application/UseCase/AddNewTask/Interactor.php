@@ -36,25 +36,25 @@ class Interactor implements AddNewTask
     }
 
     /**
-     * @param AddNewTaskRequest $addNewTaskRequest
-     * @return AddNewTaskResult
+     * @param InputData $inputData
+     * @return Result
      * @throws Exception
      */
-    public function addNewTask(AddNewTaskRequest $addNewTaskRequest): AddNewTaskResult
+    public function addNewTask(InputData $inputData): Result
     {
         $getUserResult = $this->currentUserProvider->getCurrentUser();
         $user = $getUserResult->getUser();
 
         $task = new Task(
             Uuid::uuid4(),
-            $addNewTaskRequest->getName(),
+            $inputData->getTaskName(),
             $user->getUuid(),
-            $addNewTaskRequest->isCompleted()
+            $inputData->isCompletedTask()
         );
 
         $saveTaskResult = $this->taskSaver->saveTask($task);
         $savedTask = $saveTaskResult->getTask();
 
-        return new AddNewTaskResult($savedTask);
+        return new Result($savedTask);
     }
 }

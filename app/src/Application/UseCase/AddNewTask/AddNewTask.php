@@ -9,8 +9,8 @@ namespace App\Application\UseCase\AddNewTask;
 interface AddNewTask
 {
     /**
-     * @param AddNewTaskRequest $addNewTaskRequest
-     * @return AddNewTaskResult
+     * @param InputData $inputData
+     * @return Result
      */
-    public function addNewTask(AddNewTaskRequest $addNewTaskRequest): AddNewTaskResult;
+    public function addNewTask(InputData $inputData): Result;
 }

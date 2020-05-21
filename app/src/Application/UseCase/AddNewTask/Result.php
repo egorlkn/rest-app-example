@@ -5,10 +5,10 @@ namespace App\Application\UseCase\AddNewTask;
 use App\Application\Domain\Task;
 
 /**
- * Class AddNewTaskResult
+ * Class Result
  * @package App\Application\UseCase\AddNewTask
  */
-class AddNewTaskResult
+class Result
 {
     /**
      * @var Task
@@ -16,7 +16,7 @@ class AddNewTaskResult
     private Task $task;
 
     /**
-     * AddNewTaskResult constructor.
+     * Result constructor.
      * @param Task $task
      */
     public function __construct(Task $task)

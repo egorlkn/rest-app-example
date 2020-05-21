@@ -36,10 +36,16 @@ You may add a new task to list using this action.
 
 + Request (application/json)
 
-        {
-            "name": "Task four",
-            "completed": false
-        }
+    + Attributes (object)
+        + name (string, required) - Cannot be empty
+        + completed (boolean, required)
+
+    + Body
+
+            {
+                "name": "Task four",
+                "completed": false
+            }
 
 + Response 200 (application/json)
 
@@ -48,6 +54,8 @@ You may add a new task to list using this action.
             "name": "Task four",
             "completed": false
         }
+
++ Response 400
 
 ## Existent task [/api/1/task/{uuid}]
 
