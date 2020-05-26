@@ -9,7 +9,7 @@ namespace App\Application\UseCase\GetTaskCollection;
 interface GetTaskCollection
 {
     /**
-     * @return GetTaskCollectionResult
+     * @return Result
      */
-    public function getCollection(): GetTaskCollectionResult;
+    public function getCollection(): Result;
 }

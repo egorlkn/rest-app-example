@@ -4,7 +4,7 @@ namespace App\Tests\Unit\Entry\Api\ExistentTask;
 
 use App\Application\Domain\Task;
 use App\Application\UseCase\MarkTaskAsDeleted\MarkTaskAsDeleted as MarkTaskAsDeletedUseCase;
-use App\Application\UseCase\MarkTaskAsDeleted\MarkTaskAsDeletedResult;
+use App\Application\UseCase\MarkTaskAsDeleted\Result;
 use App\Entry\Api\ExistentTask\DeleteTask as DeleteTaskRequestHandler;
 use Exception;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -45,7 +45,7 @@ class DeleteTaskTest extends TestCase
         $request = $this->createRequest($taskUuid->toString());
 
         $task = new Task($taskUuid, '', Uuid::uuid4(), true, true);
-        $this->setupUseCase(MarkTaskAsDeletedResult::createSuccessfulResult($task));
+        $this->setupUseCase(Result::createSuccessfulResult($task));
 
         $response = $this->handler->deleteTask($request);
 
@@ -61,7 +61,7 @@ class DeleteTaskTest extends TestCase
     {
         $request = $this->createRequest($taskUuid);
 
-        $this->setupUseCase(MarkTaskAsDeletedResult::createFailedResult());
+        $this->setupUseCase(Result::createFailedResult());
 
         $response = $this->handler->deleteTask($request);
 
@@ -80,9 +80,9 @@ class DeleteTaskTest extends TestCase
     }
 
     /**
-     * @param MarkTaskAsDeletedResult $expectedResult
+     * @param Result $expectedResult
      */
-    private function setupUseCase(MarkTaskAsDeletedResult $expectedResult): void
+    private function setupUseCase(Result $expectedResult): void
     {
         $this
             ->useCase

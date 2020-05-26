@@ -5,7 +5,7 @@ namespace App\Tests\Unit\Entry\Api\TaskList;
 use App\Application\Domain\Task;
 use App\Application\Domain\TaskCollection;
 use App\Application\UseCase\GetTaskCollection\GetTaskCollection;
-use App\Application\UseCase\GetTaskCollection\GetTaskCollectionResult;
+use App\Application\UseCase\GetTaskCollection\Result;
 use App\Entry\Api\TaskList\GetTaskList;
 use Exception;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -51,7 +51,7 @@ class GetTaskListTest extends TestCase
             ]
         );
 
-        $useCaseResult = new GetTaskCollectionResult($taskCollection);
+        $useCaseResult = new Result($taskCollection);
 
         $this
             ->useCase

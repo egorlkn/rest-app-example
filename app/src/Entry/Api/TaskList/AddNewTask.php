@@ -3,13 +3,13 @@
 namespace App\Entry\Api\TaskList;
 
 use App\Application\UseCase\AddNewTask\AddNewTask as AddNewTaskUseCase;
-use App\Application\UseCase\AddNewTask\AddNewTaskRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation as Http;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * Class AddNewTask
@@ -25,6 +25,11 @@ class AddNewTask extends AbstractController
     private SerializerInterface $serializer;
 
     /**
+     * @var ValidatorInterface
+     */
+    private ValidatorInterface $validator;
+
+    /**
      * @var AddNewTaskUseCase
      */
     private AddNewTaskUseCase $useCase;
@@ -32,35 +37,71 @@ class AddNewTask extends AbstractController
     /**
      * AddNewTask constructor.
      * @param SerializerInterface $serializer
+     * @param ValidatorInterface $validator
      * @param AddNewTaskUseCase $useCase
      */
-    public function __construct(SerializerInterface $serializer, AddNewTaskUseCase $useCase)
-    {
+    public function __construct(
+        SerializerInterface $serializer,
+        ValidatorInterface $validator,
+        AddNewTaskUseCase $useCase
+    ) {
         $this->serializer = $serializer;
+        $this->validator = $validator;
         $this->useCase = $useCase;
     }
 
     /**
-     * @param Request $request
-     * @return JsonResponse
+     * @param Http\Request $httpRequest
+     * @return Http\Response|Http\JsonResponse
      *
      * @Route(methods={"POST"}, name="add_new_task")
      */
-    public function addNewTask(Request $request): JsonResponse
+    public function addNewTask(Http\Request $httpRequest): Http\Response
     {
-        $addNewTaskRequest = $this->deserializeRequest($request);
+        try {
+            $addNewTaskInputData = $this->createInputData($httpRequest);
+        } catch (BadRequestHttpException $e) {
+            return (new Http\Response())->setStatusCode(Http\Response::HTTP_BAD_REQUEST);
+        }
 
-        $addNewTaskResult = $this->useCase->addNewTask($addNewTaskRequest);
+        $addNewTaskResult = $this->useCase->addNewTask($addNewTaskInputData);
 
-        return new JsonResponse($addNewTaskResult->getTask()->toArray());
+        return new Http\JsonResponse($addNewTaskResult->getTask()->toArray());
     }
 
     /**
-     * @param Request $request
-     * @return object|AddNewTaskRequest
+     * @param Http\Request $httpRequest
+     * @return AddNewTaskInputData
+     * @throws BadRequestHttpException
      */
-    private function deserializeRequest(Request $request): AddNewTaskRequest
+    private function createInputData(Http\Request $httpRequest): AddNewTaskInputData
     {
-        return $this->serializer->deserialize($request->getContent(), AddNewTaskRequest::class, JsonEncoder::FORMAT);
+        $inputData = $this->deserializeDataFromRequest($httpRequest);
+
+        $this->validateData($inputData);
+
+        return $inputData;
+    }
+
+    /**
+     * @param Http\Request $request
+     * @return object|AddNewTaskInputData
+     */
+    private function deserializeDataFromRequest(Http\Request $request): AddNewTaskInputData
+    {
+        return $this->serializer->deserialize($request->getContent(), AddNewTaskInputData::class, JsonEncoder::FORMAT);
+    }
+
+    /**
+     * @param AddNewTaskInputData $inputData
+     * @throws BadRequestHttpException
+     */
+    private function validateData(AddNewTaskInputData $inputData): void
+    {
+        $errors = $this->validator->validate($inputData);
+
+        if ($errors->count() > 0) {
+            throw new BadRequestHttpException();
+        }
     }
 }

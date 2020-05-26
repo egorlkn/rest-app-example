@@ -12,7 +12,7 @@ interface MarkTaskAsDeleted
 {
     /**
      * @param UuidInterface $taskUuid
-     * @return MarkTaskAsDeletedResult
+     * @return Result
      */
-    public function markTaskAsDeleted(UuidInterface $taskUuid): MarkTaskAsDeletedResult;
+    public function markTaskAsDeleted(UuidInterface $taskUuid): Result;
 }

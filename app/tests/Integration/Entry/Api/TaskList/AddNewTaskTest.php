@@ -15,7 +15,7 @@ class AddNewTaskTest extends WebTestCase
     /**
      * @throws JsonException
      */
-    public function testAddNewTask(): void
+    public function testAddNewTaskWithSuccessfulResponse(): void
     {
         $client = static::createClient();
         $client->request(
@@ -39,5 +39,34 @@ class AddNewTaskTest extends WebTestCase
         $content = $response->getContent();
         $this->assertNotEmpty($content);
         $this->assertJson($content);
+    }
+
+    /**
+     * @throws JsonException
+     */
+    public function testAddNewTaskWithFailedResponse(): void
+    {
+        $client = static::createClient();
+        $client->request(
+            'POST',
+            '/api/1/tasks',
+            [],
+            [],
+            [],
+            json_encode(
+                [
+                    'name' => '',
+                    'completed' => false,
+                ],
+                JSON_THROW_ON_ERROR
+            )
+        );
+
+        $response = $client->getResponse();
+        $this->assertFalse($response->isSuccessful());
+        $this->assertSame(400, $response->getStatusCode());
+
+        $content = $response->getContent();
+        $this->assertEmpty($content);
     }
 }

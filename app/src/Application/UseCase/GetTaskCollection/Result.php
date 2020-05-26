@@ -5,15 +5,15 @@ namespace App\Application\UseCase\GetTaskCollection;
 use App\Application\Domain\TaskCollection;
 
 /**
- * Class GetTaskCollectionResult
+ * Class Result
  * @package App\Application\UseCase\GetTaskCollection
  */
-class GetTaskCollectionResult
+class Result
 {
     private TaskCollection $taskCollection;
 
     /**
-     * GetTaskCollectionResult constructor.
+     * Result constructor.
      * @param TaskCollection $taskCollection
      */
     public function __construct(TaskCollection $taskCollection)

@@ -3,15 +3,15 @@
 namespace App\Entry\Api\ExistentTask;
 
 use App\Application\UseCase\EditTask\EditTask as EditTaskUseCase;
-use App\Application\UseCase\EditTask\EditTaskRequest;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation as Http;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * Class EditTask
@@ -27,6 +27,11 @@ class EditTask extends AbstractController
     private SerializerInterface $serializer;
 
     /**
+     * @var ValidatorInterface
+     */
+    private ValidatorInterface $validator;
+
+    /**
      * @var EditTaskUseCase
      */
     private EditTaskUseCase $useCase;
@@ -34,53 +39,120 @@ class EditTask extends AbstractController
     /**
      * EditTask constructor.
      * @param SerializerInterface $serializer
+     * @param ValidatorInterface $validator
      * @param EditTaskUseCase $useCase
      */
-    public function __construct(SerializerInterface $serializer, EditTaskUseCase $useCase)
-    {
+    public function __construct(
+        SerializerInterface $serializer,
+        ValidatorInterface $validator,
+        EditTaskUseCase $useCase
+    ) {
         $this->serializer = $serializer;
+        $this->validator = $validator;
         $this->useCase = $useCase;
     }
 
     /**
-     * @param Request $request
-     * @return Response|JsonResponse
+     * @param Http\Request $httpRequest
+     * @return Http\Response|Http\JsonResponse
      *
      * @Route(methods={"PUT"}, name="edit")
      */
-    public function editTask(Request $request): Response
+    public function editTask(Http\Request $httpRequest): Http\Response
     {
-        $taskUuid = (string)$request->get('uuid');
-
-        if (!Uuid::isValid($taskUuid)) {
+        try {
+            $editTaskInputData = $this->createInputData($httpRequest);
+        } catch (BadRequestHttpException $e) {
+            return $this->create400Response();
+        } catch (NotFoundHttpException $e) {
             return $this->create404Response();
         }
 
-        $editTaskRequest = $this->deserializeRequest($request);
-
-        $editTaskResult = $this->useCase->editTask(Uuid::fromString($taskUuid), $editTaskRequest);
+        $editTaskResult = $this->useCase->editTask($editTaskInputData);
 
         if (!$editTaskResult->isSuccessful()) {
             return $this->create404Response();
         }
 
-        return new JsonResponse($editTaskResult->getTask()->toArray());
+        return new Http\JsonResponse($editTaskResult->getTask()->toArray());
     }
 
     /**
-     * @param Request $request
-     * @return object|EditTaskRequest
+     * @param Http\Request $httpRequest
+     * @return EditTaskInputData
+     * @throws NotFoundHttpException
+     * @throws BadRequestHttpException
      */
-    private function deserializeRequest(Request $request): EditTaskRequest
+    private function createInputData(Http\Request $httpRequest): EditTaskInputData
     {
-        return $this->serializer->deserialize($request->getContent(), EditTaskRequest::class, JsonEncoder::FORMAT);
+        $inputData = $this->deserializeDataFromRequest($httpRequest);
+
+        $this->validateData($inputData);
+
+        return $inputData;
     }
 
     /**
-     * @return Response
+     * @param Http\Request $httpRequest
+     * @return EditTaskInputData
+     * @throws NotFoundHttpException
      */
-    private function create404Response(): Response
+    private function deserializeDataFromRequest(Http\Request $httpRequest): EditTaskInputData
     {
-        return (new Response())->setStatusCode(JsonResponse::HTTP_NOT_FOUND);
+        /** @var EditTaskInputData $inputData */
+        $inputData = $this->serializer->deserialize(
+            $httpRequest->getContent(),
+            EditTaskInputData::class,
+            JsonEncoder::FORMAT
+        );
+
+        $this->setTaskUuidFromRequest($httpRequest, $inputData);
+
+        return $inputData;
+    }
+
+    /**
+     * @param Http\Request $httpRequest
+     * @param EditTaskInputData $inputData
+     * @throws NotFoundHttpException
+     */
+    private function setTaskUuidFromRequest(Http\Request $httpRequest, EditTaskInputData $inputData): void
+    {
+        $taskUuid = (string)$httpRequest->get('uuid');
+
+        if (!Uuid::isValid($taskUuid)) {
+            throw new NotFoundHttpException();
+        }
+
+        $inputData->setTaskUuid(Uuid::fromString($taskUuid));
+    }
+
+    /**
+     * @param EditTaskInputData $inputData
+     * @throws BadRequestHttpException
+     */
+    private function validateData(EditTaskInputData $inputData): void
+    {
+        $errors = $this->validator->validate($inputData);
+
+        if ($errors->count() > 0) {
+            throw new BadRequestHttpException();
+        }
+    }
+
+    /**
+     * @return Http\Response
+     */
+    private function create400Response(): Http\Response
+    {
+        return (new Http\Response())->setStatusCode(Http\Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * @return Http\Response
+     */
+    private function create404Response(): Http\Response
+    {
+        return (new Http\Response())->setStatusCode(Http\Response::HTTP_NOT_FOUND);
     }
 }

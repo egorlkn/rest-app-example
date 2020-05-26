@@ -1,15 +1,15 @@
 <?php declare(strict_types=1);
 
-namespace App\Application\UseCase\EditTask;
+namespace App\Application\UseCase\MarkTaskAsDeleted;
 
 use App\Application\Domain\Task;
 use LogicException;
 
 /**
- * Class EditTaskResponse
- * @package App\Application\UseCase\EditTask
+ * Class Result
+ * @package App\Application\UseCase\MarkTaskAsDeleted
  */
-class EditTaskResponse
+class Result
 {
     /**
      * @var Task
