@@ -6,10 +6,10 @@ use App\Application\Domain\Task;
 use LogicException;
 
 /**
- * Class MarkTaskAsDeletedResult
+ * Class Result
  * @package App\Application\UseCase\MarkTaskAsDeleted
  */
-class MarkTaskAsDeletedResult
+class Result
 {
     /**
      * @var Task

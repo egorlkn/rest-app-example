@@ -35,9 +35,9 @@ class Interactor implements GetTaskCollection
     }
 
     /**
-     * @return GetTaskCollectionResult
+     * @return Result
      */
-    public function getCollection(): GetTaskCollectionResult
+    public function getCollection(): Result
     {
         $currentUserProviderResult = $this->currentUserProvider->getCurrentUser();
 
@@ -46,6 +46,6 @@ class Interactor implements GetTaskCollection
         );
         $taskCollection = $taskCollectionProviderResult->getTaskCollection();
 
-        return new GetTaskCollectionResult($taskCollection);
+        return new Result($taskCollection);
     }
 }

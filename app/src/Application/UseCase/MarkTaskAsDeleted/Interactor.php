@@ -47,9 +47,9 @@ class Interactor implements MarkTaskAsDeleted
 
     /**
      * @param UuidInterface $taskUuid
-     * @return MarkTaskAsDeletedResult
+     * @return Result
      */
-    public function markTaskAsDeleted(UuidInterface $taskUuid): MarkTaskAsDeletedResult
+    public function markTaskAsDeleted(UuidInterface $taskUuid): Result
     {
         $getUserResult = $this->currentUserProvider->getCurrentUser();
         $user = $getUserResult->getUser();
@@ -57,7 +57,7 @@ class Interactor implements MarkTaskAsDeleted
         $getTaskResult = $this->taskProvider->getTask($taskUuid, $user);
 
         if (!$getTaskResult->isSuccessful()) {
-            return MarkTaskAsDeletedResult::createFailedResult();
+            return Result::createFailedResult();
         }
 
         $oldTask = $getTaskResult->getTask();
@@ -73,6 +73,6 @@ class Interactor implements MarkTaskAsDeleted
         $saveTaskResult =$this->taskSaver->saveTask($markedTask);
         $savedTask = $saveTaskResult->getTask();
 
-        return MarkTaskAsDeletedResult::createSuccessfulResult($savedTask);
+        return Result::createSuccessfulResult($savedTask);
     }
 }
